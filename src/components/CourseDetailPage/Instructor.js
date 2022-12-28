@@ -1,13 +1,12 @@
 import React from "react";
 
 const Instructor = ({ instructor }) => {
-
   return (
     <div className="course-instructor">
       <div className="row">
         <div className="col-md-4">
           <div className="profile-image">
-            <img src="assets/images/profile/instructor.jpg" alt="profile" />
+            <img src={instructor.profile_pic} alt="profile" />
           </div>
         </div>
         <div className="col-md-8">

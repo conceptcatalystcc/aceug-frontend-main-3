@@ -28,8 +28,8 @@ export const BlogDetail = () => {
       })
       .catch((err) => console.log(err));
 
-      axios
-      .get(baseURL + "courses/"+coursePage)
+    axios
+      .get(baseURL + "courses/" + coursePage)
       .then((data) => data.data)
       .then((courses) => {
         setCourses(courses);
@@ -37,8 +37,8 @@ export const BlogDetail = () => {
       })
       .catch((err) => console.log(err));
 
-      axios
-      .get(baseURL + "testSeries/"+testPage)
+    axios
+      .get(baseURL + "testSeries/" + testPage)
       .then((data) => data.data)
       .then((testSeries) => {
         setTestSeries(testSeries);
@@ -46,8 +46,6 @@ export const BlogDetail = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  
 
   if (!blog) {
     return <h1>Loading</h1>;
@@ -57,75 +55,71 @@ export const BlogDetail = () => {
       <div className=" page-title-section section">
         <div className="page-title">
           <div className="container">
-          <div className="row">
-            <div className="col-8">
+            <div className="row">
+              <div className="col-8">
                 <div className="row">
-                    <h1>{blog.title}</h1>
+                  <h1>{blog.title}</h1>
                 </div>
                 <div className="row">
-                    <div className="col-10">
-                    <p><small>Published Date : {blog.createdAt}</small></p>
-                    </div>
-                    
+                  <div className="col-sm-10">
+                    <p>
+                      <small>Published Date : {blog.createdAt}</small>
+                    </p>
+                  </div>
                 </div>
-                
+
                 <hr />
 
-                <div className="row">
-                    <img src={blog.thumbnail} alt="thumbnail"/>
-                </div>
-                <div className="row">
-                <td dangerouslySetInnerHTML={{__html: blog.body}} />
-                </div>
+                <img src={blog.thumbnail} alt="thumbnail" />
+
+                <br></br>
+                <br></br>
+                <div dangerouslySetInnerHTML={{ __html: blog.body }} />
+              </div>
+              <div className="col-sm-4 text-left hidden-sm">
+                <h4>Related Courses</h4>
+                {courses.map((course, i) => (
+                  <CourseTile key={i} course={course} />
+                ))}
+              </div>
             </div>
-            <div className="col-4 text-left hidden-sm">
-            <h1>
-                Related Courses
-            </h1>
-            {courses.map((course, i) => (
-              <CourseTile key={i} course={course} />
-            ))}
-            </div>
-          </div>
           </div>
           <br />
           <br />
           <div className="row mx-3">
-          <div className="container">
-
-   
-          <h1>Related Test Series</h1>
-            <Swiper slidesPerView={4}
-
-                        centeredSlides
-                        spaceBetween={40}
-                        centeredSlidesBounds
-                        breakpoints={{
-                          0: {
-                            slidesPerView: 1,
-                          },
-                          590: {
-                            slidesPerView: 2,
-                          },
-                          770: {
-                            slidesPerView: 3,
-                          },
-                          1200: {
-                            slidesPerView: 4,
-                          },
-                        }}
-                        loop>
-            {testSeries.map((testSeries, i) => (
-                <SwiperSlide key={i}>
-              <TestSeriesTile key={i} testSeries={testSeries} />
-              </SwiperSlide>
-            ))}
-            </Swiper>
+            <div className="container">
+              <h1>Related Test Series</h1>
+              <Swiper
+                slidesPerView={4}
+                centeredSlides
+                spaceBetween={40}
+                centeredSlidesBounds
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+                  590: {
+                    slidesPerView: 2,
+                  },
+                  770: {
+                    slidesPerView: 3,
+                  },
+                  1200: {
+                    slidesPerView: 4,
+                  },
+                }}
+                loop
+              >
+                {testSeries.map((testSeries, i) => (
+                  <SwiperSlide key={i}>
+                    <TestSeriesTile key={i} testSeries={testSeries} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           </div>
         </div>
       </div>
-
     </>
   );
 };

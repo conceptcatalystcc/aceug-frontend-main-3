@@ -27,7 +27,7 @@ const Landing = () => {
         <div
           className="intro1-section section section-fluid "
           style={{
-            backgroundImage: `url("assets/images/intro/intro1/bg-1.jpg")`,
+            backgroundImage: `url("https://img.freepik.com/premium-photo/day-high-school-schoolgirl-with-notebook-backpack-back-school-teen-girl-ready-study-banner-school-girl-student-schoolgirl-pupil-portrait-with-copy-space_545934-17265.jpg")`,
           }}
           data-bg-image="%PUBLIC_URL%/assets/images/intro/intro1/bg-1.jpg"
         >
@@ -388,14 +388,12 @@ const Landing = () => {
             </div>
 
             <div className="about-me-video-wrapper">
-              
               <a
                 href="https://www.youtube.com/watch?v=Dx9bRbhT3SE"
                 className="about-me-video video-popup"
                 data-aos="fade-up"
                 target="_blank"
               >
-        
                 <img
                   className="image"
                   src="assets/images/about/about-me/about-me-popup-video-poster.jpg"
@@ -651,74 +649,82 @@ const Landing = () => {
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-01.png"
+                                src="assets/images/schools/bal bharti public.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-02.png"
+                                src="assets/images/schools/dav.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-03.png"
+                                src="assets/images/schools/loreto convent school.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-04.png"
+                                src="assets/images/schools/dps.jpeg"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-05.png"
+                                src="assets/images/schools/bal bharti public.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-06.png"
+                                src="assets/images/schools/bal bharti public.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                          {" "}
                           <div className="brand">
                             <a href="#">
                               <img
-                                src="assets/images/brand/client-logo-07.png"
+                                src="assets/images/schools/bal bharti public.png"
                                 alt="logo image"
+                                height="100px"
+                                width="150px"
                               />
                             </a>
                           </div>

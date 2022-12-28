@@ -10,13 +10,15 @@ import { SignUp } from "./components/Authentication/SignUp";
 import AddCoursePage from "./components/AddCourse/AddCoursePage";
 import { Quiz } from "./components/Quiz/Quiz";
 import { TestSeriesGridPage } from "./components/TestSeriesGrid/TestSeriesGridPage";
-import {BlogGridPage} from "./components/BlogGrid/BlogGridPage";
+import { BlogGridPage } from "./components/BlogGrid/BlogGridPage";
 import { BlogDetail } from "./components/BlogDetailPage/BlogDetail";
 import { StudentDashboard } from "./components/StudentDashboard/StudentDashboard";
-import '@tremor/react/dist/esm/tremor.css';
+import "@tremor/react/dist/esm/tremor.css";
 import { QuizGamePage } from "./components/QuizGame/QuizGamePage";
 import { Cart } from "./components/Cart/Cart";
 import { TestSeriesDetail } from "./components/TestSeriesDetail/TestSeriesDetail";
+import Video from "./components/CoursePage/Video";
+import TestAttemptPage from "./components/TestAttempt/TestAttemptPage";
 
 function App() {
   return (
@@ -30,12 +32,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/checkout" element={<CheckOutPage />} />
         <Route path="/course" element={<CoursePage />} />
-        <Route path="/test-series" element={<TestSeriesGridPage/>} />
-        <Route path="/test-series-detail" element={<TestSeriesDetail/>} />
+        <Route path="/test-series" element={<TestSeriesGridPage />} />
+        <Route path="/test-series-detail" element={<TestSeriesDetail />} />
         <Route path="/blogs" element={<BlogGridPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/blog" element={<BlogDetail />} />
+        <Route path="/vimeo" element={<Video />} />
         <Route path="/quiz-game" element={<QuizGamePage />} />
+        <Route path="/test-attempt/:testId" element={<TestAttemptPage />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         {/* <Route path="/course/:id" element={<CoursePage />} /> */}
         <Route exact path="/course-dash" element={<SingleCourseDash />} />

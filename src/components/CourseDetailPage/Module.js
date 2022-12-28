@@ -2,15 +2,16 @@ import React from "react";
 import LessonCourseItem from "./LessonCourseItem";
 import QuizCourseItem from "./QuizCourseItem";
 import VideoCourseItem from "./VideoCourseItem";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const Module = ({ module }) => {
-
-  if(!module){
-    return (<Box sx={{ display: 'flex' }}>
-    <CircularProgress />
-  </Box>)
+  if (!module) {
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
@@ -22,14 +23,13 @@ const Module = ({ module }) => {
         </div>
       </div>
       <ul className="section-content">
-   
-        {module.resources.map((resource,i) => {
+        {module.resources.map((resource, i) => {
           switch (resource.resourceType) {
-            case "video":
+            case "Video":
               return <VideoCourseItem key={i} video={resource} />;
-            case "quiz":
+            case "Quiz":
               return <QuizCourseItem key={i} quiz={resource} />;
-            case "lesson":
+            case "Lesson":
               return <LessonCourseItem key={i} lesson={resource} />;
             default:
               return;

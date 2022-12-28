@@ -6,9 +6,9 @@ const LessonCourseItem = ({ lesson }) => {
       <a className="section-item-link lesson" href="">
         <span className="item-name">{lesson.name}</span>
         <div className="course-item-meta">
-          <span className="item-meta duration">{lesson.duration} min</span>
-          <span className="item-meta item-meta-icon">
-            <i className="fas fa-lock-alt"></i>
+          <span className="item-meta count-questions">Lesson</span>
+          <span className="item-meta duration">
+            {lesson.completion_time} min
           </span>
         </div>
       </a>

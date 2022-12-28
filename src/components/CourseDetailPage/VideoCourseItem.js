@@ -9,9 +9,9 @@ const VideoCourseItem = ({ video }) => {
           <span className="item-meta item-meta-icon">
             <i className="far fa-video"></i>
           </span>
-          <span className="item-meta duration">{video.duration} min</span>
-          <span className="item-meta item-meta-icon">
-            <i className="fas fa-lock-alt"></i>
+          <span className="item-meta count-questions">Video</span>
+          <span className="item-meta duration">
+            {video.completion_time} min
           </span>
         </div>
       </a>

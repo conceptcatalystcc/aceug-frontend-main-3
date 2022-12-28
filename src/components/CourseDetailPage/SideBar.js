@@ -5,25 +5,23 @@ import { useNavigate } from "react-router-dom";
 import Razorpay from "../CheckOut/Razorpay";
 
 const SideBar = ({ course }) => {
-
   const navigate = useNavigate();
 
   function onEnrollClick() {
-    navigate("/checkout?courseId="+course._id)
+    navigate("/checkout?courseId=" + course._id);
   }
 
   function addToCart() {
-    if(localStorage.getItem("cart")){
+    if (localStorage.getItem("cart")) {
       let cart1 = JSON.parse(localStorage.getItem("cart"));
       const cart = cart1;
-      cart.push({courseId: course._id})
+      cart.push({ courseId: course._id });
       localStorage.setItem("cart", JSON.stringify(cart));
-    }else{
-      const cart = [{courseId: course._id}];
+    } else {
+      const cart = [{ courseId: course._id }];
       localStorage.setItem("cart", JSON.stringify(cart));
       console.log(JSON.parse(localStorage.getItem("cart")));
     }
-  
   }
   return (
     <>
@@ -39,7 +37,7 @@ const SideBar = ({ course }) => {
                   </span>
                   <span className="meta-value">
                     <span className="price">
-                     ₹ {course.price}
+                      ₹ {course.price}
                       <span className="decimals-separator">.00</span>
                     </span>
                   </span>
@@ -77,20 +75,13 @@ const SideBar = ({ course }) => {
                     <span className="meta-value">{course.language}</span>
                   </div>
                 </div>
-                <div className="lp-course-buttons">
-                  <button
-                    className="btn btn-primary btn-hover-secondary btn-width-100"
-                    onClick={addToCart}
-                  >
-                    Add to cart
-                  </button>
-                </div>
+
                 <div className="lp-course-buttons">
                   <button
                     className="btn btn-primary btn-hover-secondary btn-width-100"
                     onClick={onEnrollClick}
                   >
-                    Enroll
+                    Enroll Now
                   </button>
                 </div>
                 {/* <div className="entry-course-share">
@@ -142,7 +133,6 @@ const SideBar = ({ course }) => {
           </div>
         </div>
       </div>
-  
     </>
   );
 };
