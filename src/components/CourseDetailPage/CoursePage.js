@@ -87,7 +87,7 @@ const CoursePage = () => {
 
                   <Instructors instructors={course.instructors} />
 
-                  <Reviews data={course.reviews} />
+                  <Reviews reviews={course.reviews} rating={course.rating} />
                 </div>
               </div>
             </div>
