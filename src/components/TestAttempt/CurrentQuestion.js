@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 
-const CurrentQuestion = ({ question, index, answerMap, setAnswerMap }) => {
-  useEffect(() => {}, []);
-  const handleOptionChange = (e) => {
-    console.log("SetAnswer of Question ", index, "with ", e.target.value);
-    let newAnswerMap = [...answerMap];
-    newAnswerMap[index] = parseInt(e.target.value);
-    setAnswerMap(newAnswerMap);
-    console.log(newAnswerMap);
-  };
-
+const CurrentQuestion = ({
+  question,
+  questionIndex,
+  sectionIndex,
+  answerMap,
+  setAnswerMap,
+}) => {
   return (
     <>
       <b>
+        <p className="text-sm">
+          {" "}
+          Section {sectionIndex + 1} - Question {questionIndex + 1}{" "}
+        </p>
         <h4>
-          Q {index + 1} <div dangerouslySetInnerHTML={{ __html: question.q }} />
+          <div dangerouslySetInnerHTML={{ __html: question.statement }} />
         </h4>
       </b>
       {question.options.map((option, i) => {
@@ -23,17 +24,24 @@ const CurrentQuestion = ({ question, index, answerMap, setAnswerMap }) => {
             <input
               className="form-check-input"
               type="radio"
-              name={"flexRadioDefault" + index}
+              name={"flexRadioDefault" + question._id}
               value={i}
-              id={"flexRadioDefault" + "_" + i}
-              onChange={handleOptionChange}
-              checked={answerMap[index] == i ? true : false}
+              id={"flexRadioDefault" + option._id}
+              onChange={() => {
+                var newAnswerMap = new Map(answerMap);
+                newAnswerMap.set(question._id, option._id);
+                console.log(newAnswerMap);
+                setAnswerMap(newAnswerMap);
+              }}
+              checked={
+                answerMap.get(question._id) === option._id ? true : false
+              }
             />
             <label
               className="form-check-label"
-              htmlFor={"flexRadioDefault" + "_" + i}
+              htmlFor={"flexRadioDefault" + option._id}
             >
-              {option}
+              <div dangerouslySetInnerHTML={{ __html: option.value }} />
             </label>
           </div>
         );

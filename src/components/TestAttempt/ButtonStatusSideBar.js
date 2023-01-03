@@ -1,37 +1,30 @@
 import React from "react";
+import StatusButton from "./StatusButton";
 
-const ButtonStatusSideBar = ({ answerMap, setCurrentQuestion }) => {
+const ButtonStatusSideBar = ({
+  sections,
+  answerMap,
+  setCurrentQuestionIndex,
+  setCurrentSectionIndex,
+}) => {
   return (
     <div>
-      {answerMap.map((answer, index) => {
-        if (answer == -1) {
+      <center>
+        {sections.map((section, sectionIndex) => {
           return (
-            <button
-              type="button"
-              className="btn btn-outline-secondary btn-floating mx-2 my-2"
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentQuestion(index);
-              }}
-            >
-              {index + 1}
-            </button>
+            <>
+              <h4>Section {sectionIndex + 1}</h4>
+              <StatusButton
+                section={section}
+                sectionIndex={sectionIndex}
+                setCurrentQuestionIndex={setCurrentQuestionIndex}
+                setCurrentSectionIndex={setCurrentSectionIndex}
+                answerMap={answerMap}
+              />
+            </>
           );
-        } else if (answer > -1) {
-          return (
-            <button
-              type="button"
-              className="btn btn-success btn-floating mx-2 my-2"
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentQuestion(index);
-              }}
-            >
-              {index + 1}
-            </button>
-          );
-        }
-      })}
+        })}
+      </center>
     </div>
   );
 };

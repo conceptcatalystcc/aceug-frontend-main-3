@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../shared/baseUrl";
 import Loader from "../Loader";
+import AccordionItem from "./AccordionItem";
 import ButtonStatusSideBar from "./ButtonStatusSideBar";
 import CurrentQuestion from "./CurrentQuestion";
 
 const TestAttemptLayout = ({ test }) => {
-  const [currentQuestion, setCurrentQuestion] = useState();
-  const [questions, setQuestions] = useState();
-  const [answerMap, setAnswerMap] = useState();
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answerMap, setAnswerMap] = useState(new Map());
 
-  const [timer, setTimer] = useState(test.questions.length * 2 * 60);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -36,22 +36,15 @@ const TestAttemptLayout = ({ test }) => {
             <div className="col-sm-3  d-none d-lg-block d-md-block d-sm-none d-xs-none">
               <h4>Questions</h4>
 
-              <div className="list-group">
-                {test.questions.map((question, index) => {
+              <div className="accordion" id="accordionPanelsStayOpenExample">
+                {test.sections.map((section, sectionIndex) => {
                   return (
-                    <button
-                      type="button"
-                      className="list-group-item list-group-item-action"
-                      aria-current="true"
-                      key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCurrentQuestion(index);
-                      }}
-                    >
-                      <b>Q {index + 1}. </b>
-                      <div dangerouslySetInnerHTML={{ __html: question.q }} />
-                    </button>
+                    <AccordionItem
+                      section={section}
+                      sectionIndex={sectionIndex}
+                      setCurrentQuestion={setCurrentQuestionIndex}
+                      setCurrentSection={setCurrentSectionIndex}
+                    />
                   );
                 })}
               </div>
@@ -59,34 +52,58 @@ const TestAttemptLayout = ({ test }) => {
 
             <div className="col-sm-6">
               <div>
+                <center>
+                  {" "}
+                  <h3> {test.name}</h3>
+                </center>
                 <button
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-primary btn-sm"
                   id="clear"
                   onClick={() => {
-                    if (currentQuestion > 0) {
-                      setCurrentQuestion(currentQuestion - 1);
+                    if (currentQuestionIndex > 0) {
+                      setCurrentQuestionIndex(currentQuestionIndex - 1);
+                    } else if (
+                      currentQuestionIndex == 0 &&
+                      currentSectionIndex > 0
+                    ) {
+                      console.log(currentSectionIndex);
+                      setCurrentSectionIndex(currentSectionIndex - 1);
+                      console.log(currentSectionIndex);
+                      setCurrentQuestionIndex(
+                        test.sections[currentSectionIndex].questions.length - 1
+                      );
                     }
                   }}
                 >
                   Previous
                 </button>
                 <button
-                  className="btn btn-outline-danger mx-2"
+                  className="btn btn-outline-danger mx-2  btn-sm"
                   id="clear"
                   onClick={() => {
-                    let newAnswerMap = [...answerMap];
-                    newAnswerMap[currentQuestion] = -1;
+                    let newAnswerMap = new Map(answerMap);
+                    newAnswerMap.delete(
+                      test.sections[currentSectionIndex].questions[
+                        currentQuestionIndex
+                      ]._id
+                    );
                     setAnswerMap(newAnswerMap);
                   }}
                 >
                   Clear
                 </button>
                 <button
-                  className="btn btn-success ml-2"
+                  className="btn btn-success ml-2  btn-sm"
                   id="next"
                   onClick={() => {
-                    if (currentQuestion < test.questions.length - 1) {
-                      setCurrentQuestion(currentQuestion + 1);
+                    if (
+                      currentQuestionIndex <
+                      test.sections[currentSectionIndex].questions.length - 1
+                    ) {
+                      setCurrentQuestionIndex(currentQuestionIndex + 1);
+                    } else if (currentSectionIndex < test.sections.length - 1) {
+                      setCurrentSectionIndex(currentSectionIndex + 1);
+                      setCurrentQuestionIndex(0);
                     }
                   }}
                 >
@@ -94,10 +111,16 @@ const TestAttemptLayout = ({ test }) => {
                 </button>
               </div>
               <br />
+
               <div>
                 <CurrentQuestion
-                  question={test.questions[currentQuestion]}
-                  index={currentQuestion}
+                  question={
+                    test.sections[currentSectionIndex].questions[
+                      currentQuestionIndex
+                    ]
+                  }
+                  questionIndex={currentQuestionIndex}
+                  sectionIndex={currentSectionIndex}
                   answerMap={answerMap}
                   setAnswerMap={setAnswerMap}
                 />
@@ -105,33 +128,51 @@ const TestAttemptLayout = ({ test }) => {
 
               <div>
                 <button
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-primary btn-sm"
                   id="clear"
                   onClick={() => {
-                    if (currentQuestion > 0) {
-                      setCurrentQuestion(currentQuestion - 1);
+                    if (currentQuestionIndex > 0) {
+                      setCurrentQuestionIndex(currentQuestionIndex - 1);
+                    } else if (
+                      currentQuestionIndex == 0 &&
+                      currentSectionIndex > 0
+                    ) {
+                      setCurrentSectionIndex(currentSectionIndex - 1);
+                      setCurrentQuestionIndex(
+                        test.sections[currentSectionIndex].questions.length
+                      );
                     }
                   }}
                 >
                   Previous
                 </button>
                 <button
-                  className="btn btn-outline-danger mx-2"
+                  className="btn btn-outline-danger mx-2  btn-sm"
                   id="clear"
                   onClick={() => {
-                    let newAnswerMap = [...answerMap];
-                    newAnswerMap[currentQuestion] = -1;
+                    let newAnswerMap = new Map(answerMap);
+                    newAnswerMap.delete(
+                      test.sections[currentSectionIndex].questions[
+                        currentQuestionIndex
+                      ]._id
+                    );
                     setAnswerMap(newAnswerMap);
                   }}
                 >
                   Clear
                 </button>
                 <button
-                  className="btn btn-success ml-2"
+                  className="btn btn-success ml-2  btn-sm"
                   id="next"
                   onClick={() => {
-                    if (currentQuestion < test.questions.length - 1) {
-                      setCurrentQuestion(currentQuestion + 1);
+                    if (
+                      currentQuestionIndex <
+                      test.sections[currentSectionIndex].questions.length - 1
+                    ) {
+                      setCurrentQuestionIndex(currentQuestionIndex + 1);
+                    } else if (currentSectionIndex < test.sections.length - 1) {
+                      setCurrentSectionIndex(currentSectionIndex + 1);
+                      setCurrentQuestionIndex(0);
                     }
                   }}
                 >
@@ -143,7 +184,9 @@ const TestAttemptLayout = ({ test }) => {
             <div className="col-sm-3">
               <div id="status">
                 <center>
-                  <div>Time Remaining: {timer}</div>
+                  <div>
+                    <h4>Time Remaining: 20</h4>
+                  </div>
 
                   <button
                     className="btn btn-success"
@@ -165,9 +208,12 @@ const TestAttemptLayout = ({ test }) => {
                   </button>
 
                   <br />
+                  <br />
                   <ButtonStatusSideBar
                     answerMap={answerMap}
-                    setCurrentQuestion={setCurrentQuestion}
+                    setCurrentQuestionIndex={setCurrentQuestionIndex}
+                    setCurrentSectionIndex={setCurrentSectionIndex}
+                    sections={test.sections}
                   />
                 </center>
               </div>

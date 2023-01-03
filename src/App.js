@@ -18,6 +18,7 @@ import { QuizGamePage } from "./components/QuizGame/QuizGamePage";
 import { Cart } from "./components/Cart/Cart";
 import { TestSeriesDetail } from "./components/TestSeriesDetail/TestSeriesDetail";
 import Video from "./components/CoursePage/Video";
+import TestAttemptPage from "./components/TestAttempt/TestAttemptPage";
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
         <Route path="/blog" element={<BlogDetail />} />
         <Route path="/vimeo" element={<Video />} />
         <Route path="/quiz-game" element={<QuizGamePage />} />
-
+        <Route path="/test-attempt/:testId" element={<TestAttemptPage />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         {/* <Route path="/course/:id" element={<CoursePage />} /> */}
         <Route exact path="/course-dash" element={<SingleCourseDash />} />
