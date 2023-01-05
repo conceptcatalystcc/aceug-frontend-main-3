@@ -7,9 +7,12 @@ import AccordionItem from "./AccordionItem";
 import ButtonStatusSideBar from "./ButtonStatusSideBar";
 import CurrentQuestion from "./CurrentQuestion";
 
-const TestAttemptLayout = ({ test }) => {
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const TestAttemptLayout = ({ test, testSeriesId }) => {
+  const [currentQuestion, setCurrentQuestion] = useState({
+    qIndex: 0,
+    sIndex: 0,
+  });
+
   const [answerMap, setAnswerMap] = useState(new Map());
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,13 +21,16 @@ const TestAttemptLayout = ({ test }) => {
 
   const submitTest = () => {
     setIsSubmitting(true);
-    const url = baseURL + "submit-test/" + test._id;
-    console.log(url);
+    const url =
+      baseURL + "testseries/submit-test/" + testSeriesId + "/" + test._id;
+    let answerArray = Array.from(answerMap, (item) => ({ [item[0]]: item[1] }));
     axios
-      .post(url, { answers: answerMap })
+      .post(url, { answer_map: answerArray })
       .then((response) => response.data)
-      .then((report) => {
-        navigate("/report/" + report._id);
+      .then((progress) => {
+        setIsSubmitting(false);
+        console.log(progress._id);
+        navigate("/test-report/" + progress._id);
       });
   };
 
@@ -42,8 +48,7 @@ const TestAttemptLayout = ({ test }) => {
                     <AccordionItem
                       section={section}
                       sectionIndex={sectionIndex}
-                      setCurrentQuestion={setCurrentQuestionIndex}
-                      setCurrentSection={setCurrentSectionIndex}
+                      setCurrentQuestion={setCurrentQuestion}
                     />
                   );
                 })}
@@ -60,18 +65,25 @@ const TestAttemptLayout = ({ test }) => {
                   className="btn btn-outline-primary btn-sm"
                   id="clear"
                   onClick={() => {
-                    if (currentQuestionIndex > 0) {
-                      setCurrentQuestionIndex(currentQuestionIndex - 1);
+                    if (currentQuestion.qIndex > 0) {
+                      console.log("First");
+                      const newCurrentQuestion = {
+                        ...currentQuestion,
+                        qIndex: currentQuestion.qIndex - 1,
+                      };
+                      setCurrentQuestion(newCurrentQuestion);
                     } else if (
-                      currentQuestionIndex == 0 &&
-                      currentSectionIndex > 0
+                      currentQuestion.qIndex == 0 &&
+                      currentQuestion.sIndex > 0
                     ) {
-                      console.log(currentSectionIndex);
-                      setCurrentSectionIndex(currentSectionIndex - 1);
-                      console.log(currentSectionIndex);
-                      setCurrentQuestionIndex(
-                        test.sections[currentSectionIndex].questions.length - 1
-                      );
+                      console.log("Second");
+                      const newCurrentQuestion = {
+                        qIndex:
+                          test.sections[currentQuestion.sIndex - 1].questions
+                            .length - 1,
+                        sIndex: currentQuestion.sIndex - 1,
+                      };
+                      setCurrentQuestion(newCurrentQuestion);
                     }
                   }}
                 >
@@ -83,8 +95,8 @@ const TestAttemptLayout = ({ test }) => {
                   onClick={() => {
                     let newAnswerMap = new Map(answerMap);
                     newAnswerMap.delete(
-                      test.sections[currentSectionIndex].questions[
-                        currentQuestionIndex
+                      test.sections[currentQuestion.sIndex].questions[
+                        currentQuestion.qIndex
                       ]._id
                     );
                     setAnswerMap(newAnswerMap);
@@ -97,13 +109,23 @@ const TestAttemptLayout = ({ test }) => {
                   id="next"
                   onClick={() => {
                     if (
-                      currentQuestionIndex <
-                      test.sections[currentSectionIndex].questions.length - 1
+                      currentQuestion.qIndex <
+                      test.sections[currentQuestion.sIndex].questions.length - 1
                     ) {
-                      setCurrentQuestionIndex(currentQuestionIndex + 1);
-                    } else if (currentSectionIndex < test.sections.length - 1) {
-                      setCurrentSectionIndex(currentSectionIndex + 1);
-                      setCurrentQuestionIndex(0);
+                      const newCurrentQuestion = {
+                        ...currentQuestion,
+                        qIndex: currentQuestion.qIndex + 1,
+                      };
+                      setCurrentQuestion(newCurrentQuestion);
+                    } else if (
+                      currentQuestion.sIndex <
+                      test.sections.length - 1
+                    ) {
+                      const newCurrentQuestion = {
+                        qIndex: 0,
+                        sIndex: currentQuestion.sIndex + 1,
+                      };
+                      setCurrentQuestion(newCurrentQuestion);
                     }
                   }}
                 >
@@ -115,31 +137,33 @@ const TestAttemptLayout = ({ test }) => {
               <div>
                 <CurrentQuestion
                   question={
-                    test.sections[currentSectionIndex].questions[
-                      currentQuestionIndex
+                    test.sections[currentQuestion.sIndex].questions[
+                      currentQuestion.qIndex
                     ]
                   }
-                  questionIndex={currentQuestionIndex}
-                  sectionIndex={currentSectionIndex}
+                  questionIndex={currentQuestion.qIndex}
+                  sectionIndex={currentQuestion.sIndex}
                   answerMap={answerMap}
                   setAnswerMap={setAnswerMap}
                 />
               </div>
 
-              <div>
+              {/*    <div>
                 <button
                   className="btn btn-outline-primary btn-sm"
                   id="clear"
                   onClick={() => {
-                    if (currentQuestionIndex > 0) {
-                      setCurrentQuestionIndex(currentQuestionIndex - 1);
+                    if (currentQuestion.qIndex > 0) {
+                      console.log("First");
+                      setcurrentQuestion.qIndex(currentQuestion.qIndex - 1);
                     } else if (
-                      currentQuestionIndex == 0 &&
-                      currentSectionIndex > 0
+                      currentQuestion.qIndex == 0 &&
+                      currentQuestion.sIndex > 0
                     ) {
-                      setCurrentSectionIndex(currentSectionIndex - 1);
-                      setCurrentQuestionIndex(
-                        test.sections[currentSectionIndex].questions.length
+                      console.log("Second");
+                      setcurrentQuestion.sIndex(currentQuestion.sIndex - 1);
+                      setcurrentQuestion.qIndex(
+                        test.sections[currentQuestion.sIndex].questions.length
                       );
                     }
                   }}
@@ -152,8 +176,8 @@ const TestAttemptLayout = ({ test }) => {
                   onClick={() => {
                     let newAnswerMap = new Map(answerMap);
                     newAnswerMap.delete(
-                      test.sections[currentSectionIndex].questions[
-                        currentQuestionIndex
+                      test.sections[currentQuestion.sIndex].questions[
+                        currentQuestion.qIndex
                       ]._id
                     );
                     setAnswerMap(newAnswerMap);
@@ -166,19 +190,22 @@ const TestAttemptLayout = ({ test }) => {
                   id="next"
                   onClick={() => {
                     if (
-                      currentQuestionIndex <
-                      test.sections[currentSectionIndex].questions.length - 1
+                      currentQuestion.qIndex <
+                      test.sections[currentQuestion.sIndex].questions.length - 1
                     ) {
-                      setCurrentQuestionIndex(currentQuestionIndex + 1);
-                    } else if (currentSectionIndex < test.sections.length - 1) {
-                      setCurrentSectionIndex(currentSectionIndex + 1);
-                      setCurrentQuestionIndex(0);
+                      setcurrentQuestion.qIndex(currentQuestion.qIndex + 1);
+                    } else if (
+                      currentQuestion.sIndex <
+                      test.sections.length - 1
+                    ) {
+                      setcurrentQuestion.sIndex(currentQuestion.sIndex + 1);
+                      setcurrentQuestion.qIndex(0);
                     }
                   }}
                 >
                   Next
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div className="col-sm-3">
@@ -211,8 +238,7 @@ const TestAttemptLayout = ({ test }) => {
                   <br />
                   <ButtonStatusSideBar
                     answerMap={answerMap}
-                    setCurrentQuestionIndex={setCurrentQuestionIndex}
-                    setCurrentSectionIndex={setCurrentSectionIndex}
+                    setCurrentQuestion={setCurrentQuestion}
                     sections={test.sections}
                   />
                 </center>
@@ -230,14 +256,14 @@ const TestAttemptPage = () => {
 
   const params = useParams();
   const testId = params.testId;
+  const testSeriesId = params.testSeriesId;
 
   useEffect(() => {
     axios
-      .get(baseURL + "testseries/test/" + testId)
+      .get(baseURL + "testseries/test/" + testSeriesId + "/" + testId)
       .then((data) => data.data)
       .then((test) => {
         setTest(test);
-        console.log(test);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -246,7 +272,7 @@ const TestAttemptPage = () => {
     return <Loader />;
   }
 
-  return <TestAttemptLayout test={test} />;
+  return <TestAttemptLayout test={test} testSeriesId={testSeriesId} />;
 };
 
 export default TestAttemptPage;

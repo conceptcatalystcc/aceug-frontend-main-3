@@ -1,11 +1,6 @@
 import React from "react";
 
-const AccordionItem = ({
-  section,
-  sectionIndex,
-  setCurrentQuestion,
-  setCurrentSection,
-}) => {
+const AccordionItem = ({ section, sectionIndex, setCurrentQuestion }) => {
   return (
     <>
       <div className="accordion-item">
@@ -39,9 +34,10 @@ const AccordionItem = ({
                     aria-current="true"
                     key={question._id}
                     onClick={() => {
-                      console.log(questionIndex, sectionIndex);
-                      setCurrentQuestion(questionIndex);
-                      setCurrentSection(sectionIndex);
+                      setCurrentQuestion({
+                        qIndex: questionIndex,
+                        sIndex: sectionIndex,
+                      });
                     }}
                   >
                     <div

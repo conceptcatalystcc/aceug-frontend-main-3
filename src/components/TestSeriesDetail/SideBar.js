@@ -1,27 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "react-use-cart";
 
 const SideBar = ({ testSeries }) => {
-  console.log(testSeries);
-
   const navigate = useNavigate();
+  const [added, setAdded] = useState(false);
 
-  function onEnrollClick() {
-    navigate("/checkout?testSeriesId=" + testSeries._id);
-  }
-
-  function addToCart() {
-    if (localStorage.getItem("cart")) {
-      let cart1 = JSON.parse(localStorage.getItem("cart"));
-      const cart = cart1;
-      cart.push({ testSeriesId: testSeries._id });
-      localStorage.setItem("cart", JSON.stringify(cart));
-    } else {
-      const cart = [{ testSeriesId: testSeries._id }];
-      localStorage.setItem("cart", JSON.stringify(cart));
-      console.log(JSON.parse(localStorage.getItem("cart")));
-    }
-  }
+  const { addItem, items } = useCart();
   return (
     <>
       <div className="col-lg-4 col-12 order-lg-2 max-mb-50" id="sticky-sidebar">
@@ -47,19 +32,77 @@ const SideBar = ({ testSeries }) => {
                     </span>
                   </span>
                 </div>
-                <div className="course-meta"></div>
-                {/*    <div className="lp-course-buttons">
-                <button
-                  className="btn btn-primary btn-hover-secondary btn-width-100"
-                  onClick={addToCart}
-                >
-                  Add to cart
-                </button>
-              </div> */}
+                <div className="course-meta">
+                  <div className="course-duration">
+                    <span className="meta-label">
+                      <i className="far fa-clock"></i>
+                      Duration
+                    </span>
+                    <span className="meta-value">
+                      {testSeries.duration} weeks
+                    </span>
+                  </div>
+                  <div className="course-lectures">
+                    <span className="meta-label">
+                      <i className="far fa-file-alt"></i>
+                      Lectures
+                    </span>
+                    <span className="meta-value">{testSeries.lectures}</span>
+                  </div>
+
+                  <div className="course-students">
+                    <span className="meta-label">
+                      <i className="far fa-user-alt"></i>
+                      Enrolled
+                    </span>
+                    <span className="meta-value">
+                      {testSeries.enrolled} students
+                    </span>
+                  </div>
+                  <div className="course-language">
+                    <span className="meta-label">
+                      <i className="far fa-language"></i>
+                      Language
+                    </span>
+                    <span className="meta-value">{testSeries.language}</span>
+                  </div>
+                </div>
+
                 <div className="lp-course-buttons">
                   <button
                     className="btn btn-primary btn-hover-secondary btn-width-100"
-                    onClick={onEnrollClick}
+                    onClick={() => {
+                      if (!items.find((item) => item.id === testSeries._id))
+                        addItem({
+                          id: testSeries._id,
+                          price: testSeries.price,
+                          name: testSeries.name,
+                          quantity: 1,
+                          type: "Test Series",
+                          subject: testSeries.subject,
+                        });
+                      setAdded(true);
+                    }}
+                    disabled={added ? true : false}
+                  >
+                    {added ? "Added to cart" : "Add to cart"}
+                  </button>
+                </div>
+                <div className="lp-course-buttons">
+                  <button
+                    className="btn btn-primary btn-hover-secondary btn-width-100"
+                    onClick={() => {
+                      if (!items.find((item) => item.id === testSeries._id))
+                        addItem({
+                          id: testSeries._id,
+                          price: testSeries.price,
+                          name: testSeries.name,
+                          quantity: 1,
+                          type: "Test Series",
+                          subject: testSeries.subject,
+                        });
+                      navigate("/checkout");
+                    }}
                   >
                     Enroll
                   </button>

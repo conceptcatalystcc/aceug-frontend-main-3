@@ -1,11 +1,13 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "react-use-cart";
 
 import Razorpay from "../CheckOut/Razorpay";
 
 const SideBar = ({ course }) => {
   const navigate = useNavigate();
+  const { addItem, items } = useCart();
+  const [added, setAdded] = useState(false);
 
   function onEnrollClick() {
     navigate("/checkout?courseId=" + course._id);
@@ -79,9 +81,40 @@ const SideBar = ({ course }) => {
                 <div className="lp-course-buttons">
                   <button
                     className="btn btn-primary btn-hover-secondary btn-width-100"
-                    onClick={onEnrollClick}
+                    onClick={() => {
+                      if (!items.find((item) => item.id === course._id))
+                        addItem({
+                          id: course._id,
+                          price: course.price,
+                          name: course.name,
+                          quantity: 1,
+                          type: "Course",
+                          subject: course.subject,
+                        });
+                      setAdded(true);
+                    }}
+                    disabled={added ? true : false}
                   >
-                    Enroll Now
+                    {added ? "Added to cart" : "Add to cart"}
+                  </button>
+                </div>
+                <div className="lp-course-buttons">
+                  <button
+                    className="btn btn-primary btn-hover-secondary btn-width-100"
+                    onClick={() => {
+                      if (!items.find((item) => item.id === course._id))
+                        addItem({
+                          id: course._id,
+                          price: course.price,
+                          name: course.name,
+                          quantity: 1,
+                          type: "Course",
+                          subject: course.subject,
+                        });
+                      navigate("/checkout");
+                    }}
+                  >
+                    Enroll
                   </button>
                 </div>
                 {/* <div className="entry-course-share">

@@ -3,8 +3,7 @@ import React from "react";
 const StatusButton = ({
   section,
   sectionIndex,
-  setCurrentSectionIndex,
-  setCurrentQuestionIndex,
+  setCurrentQuestion,
   answerMap,
 }) => {
   return (
@@ -17,8 +16,10 @@ const StatusButton = ({
               className="btn btn-success btn-floating mx-2 my-2 btn-xs"
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentQuestionIndex(questionIndex);
-                setCurrentSectionIndex(sectionIndex);
+                setCurrentQuestion({
+                  qIndex: questionIndex,
+                  sIndex: sectionIndex,
+                });
               }}
             >
               {questionIndex + 1}
@@ -31,8 +32,10 @@ const StatusButton = ({
             className="btn btn-outline-primary btn-floating mx-2 my-2 btn-xs"
             onClick={(e) => {
               e.preventDefault();
-              setCurrentQuestionIndex(questionIndex);
-              setCurrentSectionIndex(sectionIndex);
+              setCurrentQuestion({
+                qIndex: questionIndex,
+                sIndex: sectionIndex,
+              });
             }}
           >
             {questionIndex + 1}

@@ -1,12 +1,7 @@
 import React from "react";
 import StatusButton from "./StatusButton";
 
-const ButtonStatusSideBar = ({
-  sections,
-  answerMap,
-  setCurrentQuestionIndex,
-  setCurrentSectionIndex,
-}) => {
+const ButtonStatusSideBar = ({ sections, answerMap, setCurrentQuestion }) => {
   return (
     <div>
       <center>
@@ -17,8 +12,7 @@ const ButtonStatusSideBar = ({
               <StatusButton
                 section={section}
                 sectionIndex={sectionIndex}
-                setCurrentQuestionIndex={setCurrentQuestionIndex}
-                setCurrentSectionIndex={setCurrentSectionIndex}
+                setCurrentQuestion={setCurrentQuestion}
                 answerMap={answerMap}
               />
             </>

@@ -78,36 +78,36 @@ export const SignUp = () => {
 
     if (e.target.password.value === e.target.confirmPassword.value) {
       if (numberVerified && user) {
-        if(true){
-        alert("Done");
-        const data = {
-          email: e.target.email.value,
-          password: e.target.password.value,
-          name: e.target.firstName.value,
-          // last_name: e.target.lastName.value,
-          // class: e.target.class.value,
-          phone: e.target.phone.value
-        }
-        axios
-          .post(baseURL + "student/register",data)
-          .then((response) => {
-            console.log(response);
-            const success = response.data.success;
-            const message = response.data.data.message;
+        if (true) {
+          alert("Done");
+          const data = {
+            email: e.target.email.value,
+            password: e.target.password.value,
+            name: e.target.firstName.value,
+            // last_name: e.target.lastName.value,
+            // class: e.target.class.value,
+            phone: e.target.phone.value,
+          };
+          axios
+            .post(baseURL + "student/register", data)
+            .then((response) => {
+              console.log(response);
+              const success = response.data.success;
+              const message = response.data.data.message;
 
-            if (success) {
-              alert(message);
-              navigate("/login")
-            } else {
-              alert(message);
-            }
-          })
-          .catch((error) => {
-            const errorMsg = error.message;
-            alert(errorMsg);
-          });
-      }
-     } else {
+              if (success) {
+                alert(message);
+                navigate("/login");
+              } else {
+                alert(message);
+              }
+            })
+            .catch((error) => {
+              const errorMsg = error.message;
+              alert(errorMsg);
+            });
+        }
+      } else {
         alert("Please enter the correct otp");
       }
     } else {

@@ -2,22 +2,26 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Provider } from "react-redux";
-import store from "./redux/store";
-import { Auth0Provider } from "@auth0/auth0-react";
+
+import Header from "./components/Header/Header";
+import { CartProvider } from "react-use-cart";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const header = ReactDOM.createRoot(document.getElementById("header"));
+
+header.render(
+  <CartProvider>
+    <Header />
+  </CartProvider>
+);
 root.render(
   <React.StrictMode>
-  <Auth0Provider
-    domain={process.env.REACT_APP_AUTH0_DOMAIN}
-    clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-    redirectUri={window.location.origin}
-  >
-    <Provider store={store}>
-      <App />
-    </Provider>
-    </Auth0Provider>
+    <AuthProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

@@ -1,19 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import getCurrentUser from "../../Hooks/getCurrentUser";
 import { baseURL } from "../../shared/baseUrl";
 import CourseTile from "./CourseTile";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [page, setPage] = useState(0);
-  useEffect(() => {
+  const currentUser = getCurrentUser();
 
-    const data ={
-      page:"0",
-      name: "abc"
-    }
+  useEffect(() => {
+    const data = {
+      page: "0",
+    };
+
     axios
-      .get(baseURL + "courses/"+page)
+      .get(baseURL + "courses/" + page)
       .then((data) => data.data)
       .then((courses) => {
         setCourses(courses);
@@ -51,7 +53,9 @@ const Courses = () => {
           <div className="row max-mt-50">
             <div className="col text-center">
               <button
-              onClick={()=>{setPage(page+2)}}
+                onClick={() => {
+                  setPage(page + 2);
+                }}
                 className="btn btn-outline-primary load-more-btn"
               >
                 Load More <i className="fal fa-redo ms-3"></i>

@@ -1,15 +1,17 @@
-import firebase from 'firebase';
-  
+import firebase from "firebase/compat/app";
+import { getAuth } from "firebase/auth";
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDFcqz56aFzxMNowaFAfgzlHUY6pm5dUoI",
-    authDomain: "aceug-a6e00.firebaseapp.com",
-    projectId: "aceug-a6e00",
-    storageBucket: "aceug-a6e00.appspot.com",
-    messagingSenderId: "811897481712",
-    appId: "1:811897481712:web:936e3c9bc68451e9be1535",
-    measurementId: "G-TQ8V0S15KY",
+  apiKey: "AIzaSyBea4syb1fMKqtjue6KZqXJdp7S57YHjps",
+  authDomain: "aceug-test.firebaseapp.com",
+  projectId: "aceug-test",
+  storageBucket: "aceug-test.appspot.com",
+  messagingSenderId: "1080575172295",
+  appId: "1:1080575172295:web:92f938c3267e15d0cfe8e2",
+  measurementId: "G-4F1H34KZPV",
 };
-  
-firebase.initializeApp(firebaseConfig);
-var auth = firebase.auth();
-export {auth , firebase};
+
+const app = firebase.initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+export default auth;
