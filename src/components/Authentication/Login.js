@@ -5,36 +5,34 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../shared/baseUrl";
 
-
 const Login = () => {
-
   const navigate = useNavigate();
-  const [ errorBox , setErrorBox] = useState("none");
+  const [errorBox, setErrorBox] = useState("none");
 
   function onFormLogin(e) {
     e.preventDefault();
 
     const data = {
       email: e.target.email.value,
-      password: e.target.password.value
-    }
+      password: e.target.password.value,
+    };
 
-    axios.post(baseURL+"student/login",data).then((response)=>{
+    axios
+      .post(baseURL + "student/login", data)
+      .then((response) => {
+        const success = response.data.success;
 
-      const success = response.data.success;
-
-      if(!success){
-        // alert(response.data.msg);
-        setErrorBox("flex")
-      }else{
-        axios.defaults.headers.common["Authorization"] = response.data.token;
-        localStorage.setItem('token', response.data.token);
-        navigate("/student-dashboard");
-      }
-    }).catch((error)=>{
-      console.log(error);
-    })
-
+        if (success) {
+          axios.defaults.headers.common["Authorization"] = response.data.token;
+          localStorage.setItem("token", response.data.token);
+          navigate("/student-dashboard");
+        } else {
+          setErrorBox("flex");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -57,9 +55,15 @@ const Login = () => {
                   <div className="login-form-wrapper">
                     <h3 className="title">Login</h3>
                     <form className="login-form" onSubmit={onFormLogin}>
-                    <div className="single-input">
-                    <Alert severity="error" className="mb-3" style={{display: errorBox}}>You have entered wrong email or password</Alert>
-                    </div>
+                      <div className="single-input">
+                        <Alert
+                          severity="error"
+                          className="mb-3"
+                          style={{ display: errorBox }}
+                        >
+                          You have entered wrong email or password
+                        </Alert>
+                      </div>
                       <div className="single-input mb-30">
                         <label htmlFor="email">Email</label>
                         <input
