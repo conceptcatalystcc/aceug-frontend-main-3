@@ -1,13 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import getCurrentUser from "../../Hooks/getCurrentUser";
+
 import { baseURL } from "../../shared/baseUrl";
 import CourseTile from "./CourseTile";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [page, setPage] = useState(0);
-  const currentUser = getCurrentUser();
 
   useEffect(() => {
     const data = {

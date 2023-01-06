@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import OtplessSdk from "otpless-js-sdk";
-import { firebase, auth } from "../../firebase";
+import firebase from "firebase";
 import axios from "axios";
 import { baseURL } from "../../shared/baseUrl";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ export const SignUp = () => {
   const [numberVerified, setNumberVerified] = useState(false);
   const navigate = useNavigate();
 
+  const auth = firebase.auth();
   useEffect(() => {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",

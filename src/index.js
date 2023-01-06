@@ -5,7 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 
 import Header from "./components/Header/Header";
 import { CartProvider } from "react-use-cart";
-import { AuthProvider } from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const header = ReactDOM.createRoot(document.getElementById("header"));
@@ -17,11 +16,9 @@ header.render(
 );
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </AuthProvider>
+    <CartProvider>
+      <App />
+    </CartProvider>
   </React.StrictMode>
 );
 
