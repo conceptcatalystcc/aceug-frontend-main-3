@@ -1,10 +1,56 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCart } from "react-use-cart";
+import { useAuth } from "../../contexts/AuthContext";
 import useUser from "../../Hooks/useUser";
 import { baseURL } from "../../shared/baseUrl";
 
-const CheckoutWithStudent = ({ student }) => {
+const CheckoutWithStudent = ({ currentUser }) => {
+  const [book, setBook] = useState({
+    name: "The Fault In Our Stars",
+    author: "John Green",
+    img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
+    price: 250,
+  });
+
+  const initPayment = (data) => {
+    const options = {
+      key: "rzp_test_JK8jeq57vv45rz",
+      amount: data.amount,
+      currency: data.currency,
+      name: book.name,
+      description: "Test Transaction",
+      image: book.img,
+      order_id: data.id,
+
+      handler: async (response) => {
+        try {
+          const verifyUrl = baseURL + "payment/verify";
+          const { data } = await axios.post(verifyUrl, response);
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayment = async () => {
+    try {
+      const orderUrl = baseURL + "payment/orders";
+      const { data } = await axios.post(orderUrl, { items: items });
+      console.log(data);
+      initPayment(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const {
     isEmpty,
     totalUniqueItems,
@@ -12,6 +58,7 @@ const CheckoutWithStudent = ({ student }) => {
 
     cartTotal,
   } = useCart();
+
   return (
     <>
       <div className="page-title-section section">
@@ -48,7 +95,7 @@ const CheckoutWithStudent = ({ student }) => {
                           <input
                             type="text"
                             placeholder="First Name"
-                            value={student.name}
+                            value={currentUser.displayName}
                             disabled
                           />
                         </div>
@@ -58,7 +105,7 @@ const CheckoutWithStudent = ({ student }) => {
                           <input
                             type="email"
                             placeholder="Email Address"
-                            value={student.email}
+                            value={currentUser.email}
                             disabled
                           />
                         </div>
@@ -68,7 +115,7 @@ const CheckoutWithStudent = ({ student }) => {
                           <input
                             type="text"
                             placeholder="Phone number"
-                            value={student.phone}
+                            value={currentUser.phoneNumber}
                             disabled
                           />
                         </div>
@@ -179,15 +226,18 @@ const CheckoutWithStudent = ({ student }) => {
                             </form>
                           </div>
                         </div>
-
-                        <button className="btn btn-primary btn-hover-secondary btn-width-100 mt-40">
-                          Pay Now
-                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </form>
+
+              <button
+                onClick={handlePayment}
+                className="btn btn-primary btn-hover-secondary btn-width-100 mt-40"
+              >
+                Pay Now
+              </button>
             </div>
           </div>
         </div>
@@ -197,19 +247,80 @@ const CheckoutWithStudent = ({ student }) => {
 };
 
 const CheckOutPageNew = () => {
-  const {
-    isEmpty,
-    totalUniqueItems,
-    items,
+  const { isEmpty, totalUniqueItems, items, cartTotal } = useCart();
 
-    cartTotal,
-  } = useCart();
+  const { currentUser } = useAuth();
+  console.log(currentUser);
 
-  const student = useUser();
-
-  if (student) {
-    return <CheckoutWithStudent student={student} />;
+  if (isEmpty) {
+    return (
+      <div className="page-title-section section">
+        <div className="page-title">
+          <div className="container">
+            <h1 className="title"> Your Cart is Empty</h1>
+          </div>
+        </div>
+        <div className="page-breadcrumb">
+          <div className="container">
+            <ul className="breadcrumb">
+              <li>
+                <a href="index.html">Home</a>
+              </li>
+              <li className="current"> Checkout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
   }
+
+  if (currentUser) {
+    return <CheckoutWithStudent currentUser={currentUser} />;
+  }
+
+  const [book, setBook] = useState({
+    name: "The Fault In Our Stars",
+    author: "John Green",
+    img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
+    price: 250,
+  });
+
+  const initPayment = (data) => {
+    const options = {
+      key: "rzp_test_JK8jeq57vv45rz",
+      amount: "10000",
+      currency: "INR",
+      name: book.name,
+      description: "Test Transaction",
+      image: book.img,
+      order_id: data.id,
+      handler: async (response) => {
+        try {
+          const verifyUrl = baseURL + "payment/verify";
+          const { data } = await axios.post(verifyUrl, response);
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayment = async () => {
+    try {
+      const orderUrl = baseURL + "payment/orders";
+      const { data } = await axios.post(orderUrl, { amount: book.price });
+      console.log(data);
+      initPayment(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -363,15 +474,18 @@ const CheckOutPageNew = () => {
                             </form>
                           </div>
                         </div>
-
-                        <button className="btn btn-primary btn-hover-secondary btn-width-100 mt-40">
-                          Pay Now
-                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </form>
+
+              <button
+                onClick={handlePayment}
+                className="btn btn-primary btn-hover-secondary btn-width-100 mt-40"
+              >
+                Pay Now
+              </button>
             </div>
           </div>
         </div>

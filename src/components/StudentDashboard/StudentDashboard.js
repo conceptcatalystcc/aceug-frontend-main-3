@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Swiper } from "swiper/react";
-import { Card, Title, DonutChart, Button, Metric } from "@tremor/react";
+import React from "react";
+import { Card, Title, Button, Metric } from "@tremor/react";
 import { CourseProgressTile } from "./CourseProgressTile";
 import { TestProgressTile } from "./TestProgressTile";
 import { useNavigate } from "react-router-dom";
-import useUser from "../../Hooks/useUser";
-import axios from "axios";
-import { baseURL } from "../../shared/baseUrl";
-import { useNewUser } from "../../Hooks/useNewUser";
+
+import { useAuth } from "../../contexts/AuthContext";
 
 export const StudentDashboard = () => {
-  const user = useUser();
+  const { currentUser, updatecurrentUserProfile, setError } = useAuth();
 
-  console.log(user);
+  console.log(currentUser);
 
   const navigate = useNavigate();
 
-  if (!user) {
+  if (!currentUser) {
     return <h1>Loading</h1>;
   }
 
@@ -37,7 +34,9 @@ export const StudentDashboard = () => {
       <div className="row">
         <div className="col-3 mt-2">
           <Card maxWidth="max-w-lg">
-            <Metric>Hi, {user ? user.name : "No User"}</Metric>
+            <Metric>
+              Hi, {currentUser ? currentUser.name : "No currentUser"}
+            </Metric>
 
             <hr />
             <Title>Welcome Back !!!</Title>
@@ -66,7 +65,7 @@ export const StudentDashboard = () => {
             <div className="card p-5 m-2">
               <h4> Courses in progress </h4>
               <div className=" row card-body align-left">
-                {user.courses_enrolled.map((course, i) => {
+                {currentUser.courses_enrolled.map((course, i) => {
                   return (
                     <div className="col-md-6">
                       <CourseProgressTile key={i} course={course} />
@@ -79,7 +78,7 @@ export const StudentDashboard = () => {
             <div className="card p-5 m-2">
               <h4>Test Series in progress </h4>
               <div className=" row card-body align-left">
-                {user.series_enrolled.map((series, i) => {
+                {currentUser.series_enrolled.map((series, i) => {
                   return (
                     <div className="col-md-6">
                       <TestProgressTile key={i} series={series} />

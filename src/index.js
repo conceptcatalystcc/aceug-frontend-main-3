@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import { AuthProvider } from "./contexts/AuthContext";
 import Header from "./components/Header/Header";
 import { CartProvider } from "react-use-cart";
 
@@ -10,15 +10,19 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const header = ReactDOM.createRoot(document.getElementById("header"));
 
 header.render(
-  <CartProvider>
-    <Header />
-  </CartProvider>
+  <AuthProvider>
+    <CartProvider>
+      <Header />
+    </CartProvider>
+  </AuthProvider>
 );
 root.render(
   <React.StrictMode>
-    <CartProvider>
-      <App />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

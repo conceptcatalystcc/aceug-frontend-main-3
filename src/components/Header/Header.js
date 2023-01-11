@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCart } from "react-use-cart";
+import { useAuth } from "../../contexts/AuthContext";
 import CartItem from "./CartItem";
+import { baseURL } from "../../shared/baseUrl";
 
 const Header = () => {
   const {
@@ -11,13 +13,15 @@ const Header = () => {
     cartTotal,
   } = useCart();
 
+  const { currentUser } = useAuth();
+
   return (
     <>
       <div className="header-section header-shadow sticky-header section">
         <div className="header-inner">
           <div className="container position-relative">
             <div className="row justify-content-between align-items-center">
-              <div className="col-xl-3 col-auto">
+              <div className="col-xl-2 col-auto">
                 <div className="header-logo">
                   <a href="/">
                     <img
@@ -54,11 +58,23 @@ const Header = () => {
                     <li className="has-children">
                       <a href="/about-us">About</a>
                     </li>
+                    {currentUser ? (
+                      <>
+                        <li className="has-children">
+                          <a href="/profile">Student Dashboard</a>
+                        </li>
+                        <li className="has-children">
+                          <a href="/logout">Logout</a>
+                        </li>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </ul>
                 </nav>
               </div>
 
-              <div className="col-xl-3 col-auto">
+              <div className="col-xl-2 col-auto">
                 <div className="header-right">
                   <div className="inner">
                     <div className="header-cart">
@@ -104,7 +120,7 @@ const Header = () => {
                     </div>
 
                     <div className="header-login">
-                      <a href="/signup">
+                      <a href={currentUser ? "/profile" : "/login"}>
                         <i className="far fa-user-circle"></i>
                       </a>
                     </div>

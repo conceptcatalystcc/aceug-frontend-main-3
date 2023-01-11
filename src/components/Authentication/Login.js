@@ -1,38 +1,33 @@
 import { Alert } from "@mui/material";
-import axios from "axios";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../shared/baseUrl";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [errorBox, setErrorBox] = useState("none");
+  const [loading, setLoading] = useState(false);
 
-  function onFormLogin(e) {
+  const { currentUser, login } = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
+
+  async function handleFormSubmit(e) {
     e.preventDefault();
 
-    const data = {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    };
+    try {
+      setLoading(true);
+      await login(email, password);
+      navigate("/");
+    } catch (e) {}
 
-    axios
-      .post(baseURL + "student/login", data)
-      .then((response) => {
-        const success = response.data.success;
-
-        if (success) {
-          axios.defaults.headers.common["Authorization"] = response.data.token;
-          localStorage.setItem("token", response.data.token);
-          navigate("/student-dashboard");
-        } else {
-          setErrorBox("flex");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setLoading(false);
   }
 
   return (
@@ -54,16 +49,7 @@ const Login = () => {
                 <div className="col-xl-6 col-lg-6">
                   <div className="login-form-wrapper">
                     <h3 className="title">Login</h3>
-                    <form className="login-form" onSubmit={onFormLogin}>
-                      <div className="single-input">
-                        <Alert
-                          severity="error"
-                          className="mb-3"
-                          style={{ display: errorBox }}
-                        >
-                          You have entered wrong email or password
-                        </Alert>
-                      </div>
+                    <form className="login-form" onSubmit={handleFormSubmit}>
                       <div className="single-input mb-30">
                         <label htmlFor="email">Email</label>
                         <input
@@ -71,15 +57,17 @@ const Login = () => {
                           id="email"
                           name="email"
                           placeholder="Email"
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </div>
                       <div className="single-input mb-30">
                         <label htmlFor="password">Password</label>
                         <input
-                          type="text"
+                          type="password"
                           id="password"
                           name="password"
                           placeholder="Password"
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                       <div className="single-input mb-30">
@@ -105,14 +93,28 @@ const Login = () => {
                           </div>
                         </div>
                       </div>
+
                       <div className="single-input">
                         <button className="btn btn-primary btn-hover-secondary btn-width-100">
                           Log In
                         </button>
                       </div>
                     </form>
+
+                    <div className="single-input mx-2">
+                      <hr />
+                      <center>
+                        <p>
+                          Don't have an account?{" "}
+                          <a href="/signup">
+                            <b> Sign up</b>
+                          </a>
+                        </p>
+                      </center>
+                    </div>
                   </div>
                 </div>
+
                 <div className="col-xl-3 col-lg-3"></div>
               </div>
             </div>

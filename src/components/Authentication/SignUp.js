@@ -1,118 +1,55 @@
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import firebase from "firebase";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { baseURL } from "../../shared/baseUrl";
-import { useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [aspired_college, setAspiredCollege] = useState("");
+  const [aspired_degree, setAspiredDegree] = useState("");
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [user, setUser] = useState([]);
-  const [sendOtpButton, setSendOtpButton] = useState("Send OTP");
-  const [submitOtpButton, setSubmitOtpButton] = useState("none");
-  const [numberVerified, setNumberVerified] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const auth = firebase.auth();
   useEffect(() => {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: function(response) {
-          console.log("Captcha Resolved");
-        },
-        defaultCountry: "IN",
-      }
-    );
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      }
-    });
-  }, []);
-
-  const sendOtp = (e) => {
-    e.preventDefault();
-
-    setSendOtpButton("Resend OTP");
-    setSubmitOtpButton("block");
-
-    let phone_number = "+91" + phone;
-    const appVerifier = window.recaptchaVerifier;
-
-    auth
-      .signInWithPhoneNumber(phone_number, appVerifier)
-      .then((confirmationResult) => {
-        alert("OTP sent");
-        window.confirmationResult = confirmationResult;
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
-
-  const otpSubmit = (e) => {
-    e.preventDefault();
-
-    let opt_number = otp;
-
-    window.confirmationResult
-      .confirm(opt_number)
-      .then((confirmationResult) => {
-        console.log(confirmationResult);
-        console.log("success");
-        // window.open("/", "_self");
-        console.log(user);
-        setNumberVerified(true);
-      })
-      .catch((error) => {
-        // User couldn't sign in (bad verification code?)
-        alert(error.message);
-      });
-  };
-
-  function onRegister(e) {
-    e.preventDefault();
-
-    if (e.target.password.value === e.target.confirmPassword.value) {
-      if (numberVerified && user) {
-        if (true) {
-          alert("Done");
-          const data = {
-            email: e.target.email.value,
-            password: e.target.password.value,
-            name: e.target.firstName.value,
-            // last_name: e.target.lastName.value,
-            // class: e.target.class.value,
-            phone: e.target.phone.value,
-          };
-          axios
-            .post(baseURL + "student/register", data)
-            .then((response) => {
-              console.log(response);
-              const success = response.data.success;
-              const message = response.data.data.message;
-
-              if (success) {
-                alert(message);
-                navigate("/login");
-              } else {
-                alert(message);
-              }
-            })
-            .catch((error) => {
-              const errorMsg = error.message;
-              alert(errorMsg);
-            });
-        }
-      } else {
-        alert("Please enter the correct otp");
-      }
-    } else {
-      alert("Password Doesn't match");
+    if (currentUser) {
+      navigate("/");
     }
+  }, [currentUser, navigate]);
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      return alert("Passwords do not match");
+    }
+
+    try {
+      setLoading(true);
+      axios
+        .post(baseURL + "student/register", {
+          name: name,
+          phone: phone,
+          email: email,
+          aspired_degree: aspired_degree,
+          aspired_college: aspired_college,
+        })
+        .then((response) => response.data)
+        .then((data) => {
+          navigate("/login");
+        });
+    } catch (e) {
+      alert("Failed to register");
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -138,29 +75,20 @@ export const SignUp = () => {
                     <form
                       className="login-form"
                       action=""
-                      onSubmit={onRegister}
+                      onSubmit={handleFormSubmit}
                     >
                       <div className="single-input mb-30">
-                        <label htmlFor="firstName">Full Name</label>
+                        <label htmlFor="name">Your Name</label>
                         <input
                           type="text"
                           required
-                          id="firstName"
-                          name="firstName"
-                          placeholder="First Name"
+                          id="name"
+                          name="name"
+                          placeholder="Your Full Name"
+                          onChange={(e) => setName(e.target.value)}
                         />
                       </div>
 
-                      {/* <div className="single-input mb-30">
-                        <label htmlFor="class">Class</label>
-                        <input
-                          type="text"
-                          required
-                          id="class"
-                          name="class"
-                          placeholder="Class"
-                        />
-                      </div> */}
                       <div className="single-input mb-30">
                         <label htmlFor="email">Email</label>
                         <input
@@ -169,66 +97,47 @@ export const SignUp = () => {
                           id="email"
                           name="email"
                           placeholder="Email"
+                          onChange={(e) => setEmail(e.target.value)}
                         />
-                      </div>
-                      <div className="single-input mb-30">
-                        <div className="row">
-                          <div className="col">
-                            <label htmlFor="phone">Contact Number</label>
-                            <input
-                              type="tel"
-                              required
-                              minLength={10}
-                              maxLength={10}
-                              id="phone"
-                              name="phone"
-                              placeholder="Contact Number"
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                            />
-                          </div>
-                          <div className="col-5 col-md-4">
-                            <label htmlFor="otp">OTP</label>
-                            <input
-                              type="text"
-                              required
-                              minLength={6}
-                              maxLength={6}
-                              id="otp"
-                              name="otp"
-                              placeholder="OTP"
-                              value={otp}
-                              onChange={(e) => setOtp(e.target.value)}
-                            />
-                          </div>
-                        </div>
                       </div>
 
                       <div className="single-input mb-30">
-                        <div className="row">
-                          <div className="col-5 col-md-4">
-                            <button
-                              type="submit"
-                              onClick={sendOtp}
-                              className="btn btn-primary btn-hover-secondary p-4"
-                            >
-                              {sendOtpButton}
-                            </button>
-                          </div>
-                          <div
-                            style={{ display: submitOtpButton }}
-                            className="col-5 col-md-4"
-                          >
-                            <button
-                              type="submit"
-                              onClick={otpSubmit}
-                              className="btn btn-primary btn-hover-secondary p-4"
-                            >
-                              Submit OTP
-                            </button>
-                          </div>
-                        </div>
+                        <label htmlFor="phone">Phone</label>
+                        <input
+                          type="number"
+                          required
+                          id="phone"
+                          name="phone"
+                          placeholder="Your Phone Number"
+                          onChange={(e) => setPhone(e.target.value)}
+                          minLength="10"
+                        />
                       </div>
+
+                      <div className="single-input mb-30">
+                        <label htmlFor="aspired_degree">Aspired Degree</label>
+                        <input
+                          type="text"
+                          required
+                          id="aspired_degree"
+                          name="aspired_degree"
+                          placeholder="Degree you want to pursue"
+                          onChange={(e) => setAspiredDegree(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="single-input mb-30">
+                        <label htmlFor="aspired_college">Aspired College</label>
+                        <input
+                          type="text"
+                          required
+                          id="aspired_college"
+                          name="aspired_college"
+                          placeholder="College you wish to get Admission in"
+                          onChange={(e) => setAspiredCollege(e.target.value)}
+                        />
+                      </div>
+
                       <div className="single-input mb-30">
                         <label htmlFor="password">Password</label>
                         <input
@@ -238,6 +147,7 @@ export const SignUp = () => {
                           id="password"
                           name="password"
                           placeholder="Password"
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                       <div className="single-input mb-30">
@@ -251,6 +161,7 @@ export const SignUp = () => {
                           id="confirmPassword"
                           name="confirmPassword"
                           placeholder="Confirm Password"
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                       </div>
                       <div className="single-input">
@@ -262,6 +173,17 @@ export const SignUp = () => {
                         </button>
                       </div>
                     </form>
+                    <div className="single-input mx-2">
+                      <hr />
+                      <center>
+                        <p>
+                          Already have an account?{" "}
+                          <a href="/login">
+                            <b> Log in </b>
+                          </a>
+                        </p>
+                      </center>
+                    </div>
                   </div>
                 </div>
                 <div className="col-xl-3 col-lg-3"></div>

@@ -1,7 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { baseURL } from "../../shared/baseUrl";
+import Login from "../Authentication/Login";
+import LoginPhone from "../Authentication/LoginPhone";
 import Loader from "../Loader";
 import AccordionItem from "./AccordionItem";
 import ButtonStatusSideBar from "./ButtonStatusSideBar";
@@ -18,21 +21,41 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const submitTest = () => {
     setIsSubmitting(true);
-    const url =
-      baseURL + "testseries/submit-test/" + testSeriesId + "/" + test._id;
-    let answerArray = Array.from(answerMap, (item) => ({ [item[0]]: item[1] }));
-    axios
-      .post(url, { answer_map: answerArray })
-      .then((response) => response.data)
-      .then((progress) => {
-        setIsSubmitting(false);
-        console.log(progress._id);
-        navigate("/test-report/" + progress._id);
+
+    if (currentUser) {
+      currentUser.getIdToken().then((token) => {
+        const payloadHeader = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        const url =
+          baseURL + "testseries/submit-test/" + testSeriesId + "/" + test._id;
+        let answerArray = Array.from(answerMap, (item) => ({
+          question: [item[0]],
+          selected_option: item[1],
+        }));
+
+        axios
+          .post(url, { answer_map: answerArray }, payloadHeader)
+          .then((response) => response.data)
+          .then((progress) => {
+            setIsSubmitting(false);
+            console.log(progress._id);
+            navigate("/test-report/" + progress._id);
+          });
       });
+    }
   };
+
+  useEffect(() => {
+    console.log(test);
+  }, []);
 
   return (
     <>
@@ -251,24 +274,57 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
   );
 };
 
+const Error = ({ error }) => {
+  return (
+    <>
+      <div className="section">
+        <div className="container">{error}</div>
+      </div>
+    </>
+  );
+};
+
 const TestAttemptPage = () => {
-  const [test, setTest] = useState(null);
+  const [test, setTest] = useState();
+  const [error, setError] = useState();
 
   const params = useParams();
   const testId = params.testId;
   const testSeriesId = params.testSeriesId;
 
+  const { currentUser } = useAuth();
+
   useEffect(() => {
-    axios
-      .get(baseURL + "testseries/test/" + testSeriesId + "/" + testId)
-      .then((data) => data.data)
-      .then((test) => {
-        setTest(test);
-      })
-      .catch((err) => console.log(err));
+    currentUser &&
+      currentUser.getIdToken().then((token) => {
+        const payloadHeader = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        axios
+          .get(
+            baseURL + "testseries/test/" + testSeriesId + "/" + testId,
+            payloadHeader
+          )
+          .then((data) => data.data)
+          .then((test) => {
+            setTest(test);
+          })
+          .catch((err) => console.log(err));
+      });
   }, []);
 
+  if (!currentUser) {
+    return <LoginPhone />;
+  }
+
   if (!test) {
+    return <Loader />;
+  }
+
+  if (!currentUser) {
     return <Loader />;
   }
 

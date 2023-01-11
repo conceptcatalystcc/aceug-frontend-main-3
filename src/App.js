@@ -21,6 +21,9 @@ import TestAttemptPage from "./components/TestAttempt/TestAttemptPage";
 import CheckOutPageNew from "./components/CheckoutPageNew/CheckoutPageNew";
 import TestReportPage from "./components/TestReport/TestReportPage";
 import LogoutPage from "./components/Authentication/LogoutPage";
+import { Profile } from "./components/Authentication/Profile";
+import OTPVerify from "./components/Authentication/OTPVerify";
+import LoginPhone from "./components/Authentication/LoginPhone";
 
 function App() {
   return (
@@ -28,13 +31,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/courses" element={<Courses />} />
-        {/*         <Route path="/signup" element={<SignUp />} /> */}
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/add-course" element={<AddCoursePage />} />
         <Route path="/quiz" element={<Quiz />} />
-        {/*   <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<LogoutPage />} /> */}
+        <Route path="/verifyOTP" element={<OTPVerify />} />
+        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/login" element={<LoginPhone />} />
+        <Route path="/logout" element={<LogoutPage />} />
         <Route path="/checkout" element={<CheckOutPageNew />} />
         <Route path="/course" element={<CoursePage />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/test-series" element={<TestSeriesGridPage />} />
         <Route
           path="/test-series-detail/:testSeriesId"
