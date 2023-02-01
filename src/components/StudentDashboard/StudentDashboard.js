@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Title, Button, Metric } from "@tremor/react";
 import { CourseProgressTile } from "./CourseProgressTile";
 import { TestProgressTile } from "./TestProgressTile";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+import { baseURL } from "../../shared/baseUrl";
 
 export const StudentDashboard = () => {
-  const { currentUser, updatecurrentUserProfile, setError } = useAuth();
+  const { currentUser } = useAuth();
+  const [testSeriesEnrollments, setTestSeriesEnrollments] = useState();
 
-  console.log(currentUser);
+  useEffect(() => {
+    currentUser &&
+      currentUser.getIdToken().then((token) => {
+        const payloadHeader = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
 
-  const navigate = useNavigate();
+        axios
+          .get(baseURL + "student/testSeriesEnrolled", payloadHeader)
+          .then((response) => response.data)
+          .then((enrollments) => {
+            console.log(enrollments);
+            setTestSeriesEnrollments(enrollments);
+          })
+          .catch((err) => console.log(err));
+      });
+  }, []);
 
   if (!currentUser) {
     return <h1>Loading</h1>;
@@ -23,14 +42,7 @@ export const StudentDashboard = () => {
       <br />
       <br />
       <h1 className="text-center m-3 p-5">Student Dashboard</h1>
-      <Button
-        size="md"
-        marginTop="mt-3"
-        importance="primary"
-        text="Play Quiz"
-        className="center"
-        handleClick={() => navigate("/quiz-game")}
-      />
+
       <div className="row">
         <div className="col-3 mt-2">
           <Card maxWidth="max-w-lg">
@@ -47,14 +59,6 @@ export const StudentDashboard = () => {
               size="md"
               marginTop="mt-3"
               importance="primary"
-              text="Update Profile"
-              handleClick={() => console.log("clicked")}
-            />
-
-            <Button
-              size="md"
-              marginTop="mt-3"
-              importance="primary"
               text="LogOut"
               handleClick={() => localStorage.clear()}
             />
@@ -62,7 +66,7 @@ export const StudentDashboard = () => {
         </div>
         <div className="col-9">
           <div className="row">
-            <div className="card p-5 m-2">
+            {/*   <div className="card p-5 m-2">
               <h4> Courses in progress </h4>
               <div className=" row card-body align-left">
                 {currentUser.courses_enrolled.map((course, i) => {
@@ -73,18 +77,24 @@ export const StudentDashboard = () => {
                   );
                 })}
               </div>
-            </div>
+            </div> */}
 
             <div className="card p-5 m-2">
               <h4>Test Series in progress </h4>
               <div className=" row card-body align-left">
-                {currentUser.series_enrolled.map((series, i) => {
-                  return (
-                    <div className="col-md-6">
-                      <TestProgressTile key={i} series={series} />
-                    </div>
-                  );
-                })}
+                <div className="col-md-12">
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {testSeriesEnrollments &&
+                      testSeriesEnrollments.map((enrollment) => {
+                        console.log(enrollment);
+                        return (
+                          <TestProgressTile
+                            testSeries={enrollment.testseries}
+                          />
+                        );
+                      })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

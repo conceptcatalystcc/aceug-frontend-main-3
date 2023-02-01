@@ -11,6 +11,11 @@ import ButtonStatusSideBar from "./ButtonStatusSideBar";
 import CurrentQuestion from "./CurrentQuestion";
 
 const TestAttemptLayout = ({ test, testSeriesId }) => {
+  const [score, setScore] = useState(0);
+  const [show, setShow] = useState(false);
+  const [askSubmit, setAskSubmit] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const [currentQuestion, setCurrentQuestion] = useState({
     qIndex: 0,
     sIndex: 0,
@@ -22,6 +27,33 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
 
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
+  const askToSubmit = () => {
+    setAskSubmit(true);
+  };
+
+  const calculateScore = () => {
+    var score = 0;
+    var correct = 0;
+    var wrong = 0;
+    return new Promise((resolve, reject) => {
+      for (var i = 0; i < answerMap.length; i++) {
+        if (answerMap[i] === -1) {
+          continue;
+        } else if (answerMap[i] === test.questions[i].correct) {
+          score = score + 2;
+          correct += 1;
+        } else {
+          score = score - 0.66;
+          wrong += 1;
+        }
+      }
+
+      if (i === answerMap.length) {
+        resolve([score, wrong, correct]);
+      }
+    });
+  };
 
   const submitTest = () => {
     setIsSubmitting(true);
@@ -42,7 +74,11 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
         }));
 
         axios
-          .post(url, { answer_map: answerArray }, payloadHeader)
+          .post(
+            url,
+            { answer_map: answerArray, score: 20, time: 353 },
+            payloadHeader
+          )
           .then((response) => response.data)
           .then((progress) => {
             setIsSubmitting(false);
@@ -244,7 +280,7 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
                     data-mdb-target="#exampleModal"
                     id="msub"
                     onClick={() => {
-                      submitTest();
+                      askToSubmit();
                     }}
                     disabled={isSubmitting}
                   >
@@ -270,6 +306,70 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
           </div>
         </div>
       </section>
+
+      {askSubmit ? (
+        <div id="max-popup" class="max-popup-section section">
+          <div class="max-popup-dialog animated fadeInUp">
+            <button
+              class="max-popup-close"
+              onClick={() => {
+                setAskSubmit(false);
+              }}
+            >
+              <i class="fal fa-times"></i>
+            </button>
+            <div class="max-popup-dialog-inner">
+              <div class="row">
+                <div class="col-md-12 col-12 align-self-center">
+                  <div class="freecourse-popup-content">
+                    <h6 class="sub-title">
+                      Once submitted, you will not be able to edit your answers
+                    </h6>
+                    <h2 class="title">
+                      Are you sure you want to Submit the Test?
+                    </h2>
+                  </div>
+
+                  <center>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Attempted Questions</th>
+                          <th scope="col">Time Left</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{answerMap.size}</td>
+                          <td>Otto</td>
+                        </tr>
+                      </tbody>
+                    </table>{" "}
+                    <button
+                      className="btn btn-success mx-2  btn-sm"
+                      onClick={() => {
+                        submitTest();
+                      }}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="btn btn-danger mx-2  btn-sm"
+                      onClick={() => {
+                        setAskSubmit(false);
+                      }}
+                    >
+                      No
+                    </button>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <> </>
+      )}
     </>
   );
 };

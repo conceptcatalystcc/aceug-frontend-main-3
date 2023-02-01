@@ -8,7 +8,7 @@ const ButtonStatusSideBar = ({ sections, answerMap, setCurrentQuestion }) => {
         {sections.map((section, sectionIndex) => {
           return (
             <>
-              <h4>Section {sectionIndex + 1}</h4>
+              <h4>{section.name}</h4>
               <StatusButton
                 section={section}
                 sectionIndex={sectionIndex}

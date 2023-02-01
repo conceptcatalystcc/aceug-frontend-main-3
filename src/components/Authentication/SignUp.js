@@ -11,8 +11,6 @@ export const SignUp = () => {
   const [aspired_college, setAspiredCollege] = useState("");
   const [aspired_degree, setAspiredDegree] = useState("");
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
   const { currentUser } = useAuth();
@@ -26,10 +24,6 @@ export const SignUp = () => {
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      return alert("Passwords do not match");
-    }
 
     try {
       setLoading(true);
@@ -118,12 +112,20 @@ export const SignUp = () => {
                         <label htmlFor="aspired_degree">Aspired Degree</label>
                         <input
                           type="text"
+                          list="degrees"
                           required
                           id="aspired_degree"
                           name="aspired_degree"
                           placeholder="Degree you want to pursue"
                           onChange={(e) => setAspiredDegree(e.target.value)}
                         />
+                        <datalist id="degrees">
+                          <option value="Edge" />
+                          <option value="Firefox" />
+                          <option value="Chrome" />
+                          <option value="Opera" />
+                          <option value="Safari" />
+                        </datalist>
                       </div>
 
                       <div className="single-input mb-30">
@@ -131,39 +133,21 @@ export const SignUp = () => {
                         <input
                           type="text"
                           required
+                          list="colleges"
                           id="aspired_college"
                           name="aspired_college"
                           placeholder="College you wish to get Admission in"
                           onChange={(e) => setAspiredCollege(e.target.value)}
                         />
+                        <datalist id="colleges">
+                          <option value="Edge" />
+                          <option value="Firefox" />
+                          <option value="Chrome" />
+                          <option value="Opera" />
+                          <option value="Safari" />
+                        </datalist>
                       </div>
 
-                      <div className="single-input mb-30">
-                        <label htmlFor="password">Password</label>
-                        <input
-                          type="password"
-                          required
-                          minLength={8}
-                          id="password"
-                          name="password"
-                          placeholder="Password"
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                      </div>
-                      <div className="single-input mb-30">
-                        <label htmlFor="confirmPassword">
-                          Confirm Password
-                        </label>
-                        <input
-                          type="password"
-                          required
-                          minLength={8}
-                          id="confirmPassword"
-                          name="confirmPassword"
-                          placeholder="Confirm Password"
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                      </div>
                       <div className="single-input">
                         <button
                           type="submit"

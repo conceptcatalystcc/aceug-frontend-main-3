@@ -46,7 +46,9 @@ const AccordionItem = ({ section, sectionIndex, setCurrentQuestion }) => {
                           "<b>Q" +
                           (questionIndex + 1) +
                           "</b>" +
-                          question.statement,
+                          "<div style='text-overflow:ellipsis;overflow:hidden; display: -webkit-box !important; -webkit-line-clamp: 4; -webkit-box-orient: vertical; white-space: normal;'>" +
+                          question.statement +
+                          "</div>",
                       }}
                     ></div>
                   </button>

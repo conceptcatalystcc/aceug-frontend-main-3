@@ -14,9 +14,9 @@ const CurrentQuestion = ({
           {" "}
           Section {sectionIndex + 1} - Question {questionIndex + 1}{" "}
         </p>
-        <h4>
+        <h5>
           <div dangerouslySetInnerHTML={{ __html: question.statement }} />
-        </h4>
+        </h5>
       </b>
       {question.options.map((option, i) => {
         return (

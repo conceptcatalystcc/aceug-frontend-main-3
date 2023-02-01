@@ -61,7 +61,7 @@ const Header = () => {
                     {currentUser ? (
                       <>
                         <li className="has-children">
-                          <a href="/profile">Student Dashboard</a>
+                          <a href="/student-dashboard">Student Dashboard</a>
                         </li>
                         <li className="has-children">
                           <a href="/logout">Logout</a>

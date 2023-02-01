@@ -52,9 +52,7 @@ const TestSeries = ({ testSeries }) => {
                 <div className="row"></div>
                 <div className="card-group">
                   {testSeries.tests.map((test) => {
-                    return (
-                      <TestCard test={test} testSeriesId={testSeries._id} />
-                    );
+                    return <TestCard test={test} testSeries={testSeries} />;
                   })}
                 </div>
               </div>

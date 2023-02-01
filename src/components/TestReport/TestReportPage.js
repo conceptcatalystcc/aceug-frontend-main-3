@@ -24,42 +24,33 @@ const Report = ({ progress }) => {
         </div>
       </div>
 
-      <div className="section">
+      <div className="section mb-50">
         <div className="container">
           <div className="row">
-            <div className="col-sm-3">
-              <h3>Topper's List</h3>
-              <table class="table">
+            <div className="col-sm-1"></div>
+            <div className="col-sm-10">
+              <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col">All India Rank</th>
-                    <th scope="col">Student</th>
                     <th scope="col">Score</th>
+                    <th scope="col">Accuracy</th>
+                    <th scope="col">Correct</th>
+                    <th scope="col">Wrong</th>
+                    <th scope="col">Time Taken</th>
+                    <th scope="col">Avg Time / Question</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry the Bird</td>
-                    <td>@twitter</td>
+                    <td>23</td>
+                    <td>45 %</td>
+                    <td>13</td>
+                    <td>8</td>
+                    <td>34</td>
+                    <td>2.8</td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div className="col-sm-9">
-              <LineChart width={400} height={400} data={data}>
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-              </LineChart>
               <h3>Your Performance</h3>
               {test &&
                 test.sections.map((section) => {
@@ -71,6 +62,8 @@ const Report = ({ progress }) => {
                   );
                 })}
             </div>
+
+            <div className="col-sm-1"></div>
           </div>
         </div>
       </div>

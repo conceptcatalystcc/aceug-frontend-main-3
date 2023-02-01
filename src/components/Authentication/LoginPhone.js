@@ -8,7 +8,8 @@ const LoginPhone = () => {
   const [resend, setResend] = useState(false);
   const [otp, setOtp] = useState();
   const [phone, setPhone] = useState();
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
+  const [showOTP, setShowOTP] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,16 +32,14 @@ const LoginPhone = () => {
       .then((confirmationResult) => {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
-        alert("OTP sent");
+
         window.confirmationResult = confirmationResult;
 
         setResend(true);
         // ...
       })
       .catch((error) => {
-        // Error; SMS not sent
-        // ...
-        setError(error);
+        setError("Invalid OTP Entered");
       });
   };
 
@@ -54,9 +53,8 @@ const LoginPhone = () => {
         // ...
       })
       .catch((error) => {
-        // User couldn't sign in (bad verification code?)
-        // ...
-        setError(error);
+        console.log(error);
+        setError(error.toString());
       });
   };
 
@@ -94,6 +92,14 @@ const LoginPhone = () => {
                       <></>
                     )}
 
+                    {resend && !error ? (
+                      <div class="alert alert-success" role="alert">
+                        OTP has been sent
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+
                     <div className="single-input mb-30">
                       <input
                         type="number"
@@ -106,17 +112,21 @@ const LoginPhone = () => {
                       />
                     </div>
 
-                    <div className="single-input mb-30">
-                      <input
-                        type="text"
-                        required
-                        id="otp"
-                        name="otp"
-                        placeholder="OTP"
-                        onChange={(e) => setOtp(e.target.value)}
-                        minLength="10"
-                      />
-                    </div>
+                    {resend ? (
+                      <div className="single-input mb-30">
+                        <input
+                          type="text"
+                          required
+                          id="otp"
+                          name="otp"
+                          placeholder="OTP"
+                          onChange={(e) => setOtp(e.target.value)}
+                          minLength="10"
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
 
                     <div className="single-input">
                       {!resend ? (
