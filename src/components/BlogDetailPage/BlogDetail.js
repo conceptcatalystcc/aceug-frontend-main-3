@@ -2,47 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { baseURL } from "../../shared/baseUrl";
 import axios from "axios";
-import CourseTile from "../CoursesGridPage/CourseTile";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper.min.css";
-import { TestSeriesTile } from "../TestSeriesGrid/TestSeriesTile";
+import { NoLuggage } from "@mui/icons-material";
+import { Helmet } from "react-helmet";
 
 export const BlogDetail = () => {
   const [blog, setBlog] = useState({});
-  const [searchParams, setSearchParams] = useSearchParams();
-  const title = searchParams.get("title");
 
-  const [courses, setCourses] = useState([]);
-  const [coursePage, setCoursePage] = useState(0);
-
-  const [testSeries, setTestSeries] = useState([]);
-  const [testPage, setTestPage] = useState(0);
+  const params = useParams();
+  const blogTitle = params.blogTitle;
 
   useEffect(() => {
+    const url = baseURL + "blogs/blog/" + blogTitle;
     axios
-      .get(baseURL + "blogs/blog/" + title)
+      .get(encodeURI(url))
       .then((data) => data.data)
       .then((blog) => {
         setBlog(blog);
         console.log(blog);
-      })
-      .catch((err) => console.log(err));
-
-    axios
-      .get(baseURL + "courses/" + coursePage)
-      .then((data) => data.data)
-      .then((courses) => {
-        setCourses(courses);
-        console.log(courses);
-      })
-      .catch((err) => console.log(err));
-
-    axios
-      .get(baseURL + "testSeries/" + testPage)
-      .then((data) => data.data)
-      .then((testSeries) => {
-        setTestSeries(testSeries);
-        console.log(testSeries);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -52,71 +28,51 @@ export const BlogDetail = () => {
   }
   return (
     <>
-      <div className=" page-title-section section">
-        <div className="page-title">
-          <div className="container">
-            <div className="row">
-              <div className="col-8">
-                <div className="row">
-                  <h1>{blog.title}</h1>
-                </div>
-                <div className="row">
-                  <div className="col-sm-10">
-                    <p>
-                      <small>Published Date : {blog.createdAt}</small>
-                    </p>
-                  </div>
-                </div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{blog.title}</title>
+        <meta name="description" content={blog.meta_desc} />
+        <meta name="keywords" content={blog.meta_keywords} />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.meta_desc} />
+        <meta property="og:image" content={NoLuggage.thumbnail} />
+      </Helmet>
 
-                <hr />
-
-                <img src={blog.thumbnail} alt="thumbnail" />
-
-                <br></br>
-                <br></br>
-                <div dangerouslySetInnerHTML={{ __html: blog.body }} />
-              </div>
-              <div className="col-sm-4 text-left hidden-sm">
-                <h4>Related Courses</h4>
-                {courses.map((course, i) => (
-                  <CourseTile key={i} course={course} />
-                ))}
-              </div>
-            </div>
-          </div>
-          <br />
-          <br />
-          <div className="row mx-3">
-            <div className="container">
-              <h1>Related Test Series</h1>
-              <Swiper
-                slidesPerView={4}
-                centeredSlides
-                spaceBetween={40}
-                centeredSlidesBounds
-                breakpoints={{
-                  0: {
-                    slidesPerView: 1,
-                  },
-                  590: {
-                    slidesPerView: 2,
-                  },
-                  770: {
-                    slidesPerView: 3,
-                  },
-                  1200: {
-                    slidesPerView: 4,
-                  },
-                }}
-                loop
+      <div className="section">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-1"></div>
+            <div className="col-sm-10 mb-50 mt-50">
+              <h1
+                style={{ fontSize: "48px", fontFamily: "'Roboto', sans-serif" }}
+                className="text-center mb-50 d-md-block d-none"
               >
-                {testSeries.map((testSeries, i) => (
-                  <SwiperSlide key={i}>
-                    <TestSeriesTile key={i} testSeries={testSeries} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                {blog.title}
+              </h1>
+
+              <h1
+                style={{ fontFamily: "'Roboto', sans-serif" }}
+                className="text-center mb-50 d-md-none d-block"
+              >
+                {blog.title}
+              </h1>
+
+              <center>
+                {" "}
+                <img
+                  src={blog.thumbnail}
+                  alt="thumbnail"
+                  className="img-fluid w-100 shadow-lg"
+                />
+              </center>
+
+              <div
+                dangerouslySetInnerHTML={{ __html: blog.body }}
+                className="mt-50 mb-50"
+                style={{ fontSize: "20px" }}
+              />
             </div>
+            <div className="col-sm-1"></div>
           </div>
         </div>
       </div>

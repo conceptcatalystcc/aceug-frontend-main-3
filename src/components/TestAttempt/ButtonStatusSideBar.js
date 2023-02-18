@@ -9,6 +9,7 @@ const ButtonStatusSideBar = ({ sections, answerMap, setCurrentQuestion }) => {
           return (
             <>
               <h4>{section.name}</h4>
+
               <StatusButton
                 section={section}
                 sectionIndex={sectionIndex}

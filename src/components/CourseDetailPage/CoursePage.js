@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useSearchParams } from "react-router-dom";
-import { fetchCourse } from "../../redux/courses/courseActions";
+
 import Curriculum from "./Curriculum";
 import Instructors from "./Instructors";
 import Overview from "./Overview";
@@ -11,12 +9,12 @@ import { baseURL } from "../../shared/baseUrl";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { useParams } from "react-router-dom";
 
 const CoursePage = () => {
   const [course, setCourse] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const id = searchParams.get("courseId");
-  // const id = useParams();
+  const params = useParams();
+  const id = params.courseId;
 
   useEffect(() => {
     axios

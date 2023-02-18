@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { baseURL } from "../../shared/baseUrl";
 
 const CourseTile = ({ course }) => {
-
-  const url = "/course?courseId="+course._id;
+  const url = "/course/" + course._id;
 
   return (
     <>
@@ -18,7 +17,7 @@ const CourseTile = ({ course }) => {
           <div className="info">
             <span className="price p-5">₹{course.price}</span>
             <span className="date">{course.createdOn}</span>
-            <h3 className="title" style={{textAlign: "left"}}>
+            <h3 className="title" style={{ textAlign: "left" }}>
               <Link to={url}>{course.name}</Link>
             </h3>
             <ul className="meta p-0 m-0">
@@ -28,13 +27,10 @@ const CourseTile = ({ course }) => {
               </li>
             </ul>
             <div className="lp-course-buttons mt-2">
-                  <button
-                    className="btn btn-primary btn-hover-secondary btn-width-100"
-         
-                  >
-                    Enroll
-                  </button>
-                </div>
+              <button className="btn btn-primary btn-hover-secondary btn-width-100">
+                Enroll
+              </button>
+            </div>
           </div>
         </div>
       </div>

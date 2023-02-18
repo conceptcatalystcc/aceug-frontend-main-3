@@ -7,7 +7,7 @@ import Header from "./components/Header/Header";
 import { CartProvider } from "react-use-cart";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const header = ReactDOM.createRoot(document.getElementById("header"));
+/* const header = ReactDOM.createRoot(document.getElementById("header"));
 
 header.render(
   <AuthProvider>
@@ -15,7 +15,7 @@ header.render(
       <Header />
     </CartProvider>
   </AuthProvider>
-);
+); */
 root.render(
   <React.StrictMode>
     <AuthProvider>

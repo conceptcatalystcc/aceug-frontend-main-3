@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { baseURL } from "../../shared/baseUrl";
 
 export const BlogTile = ({ blog }) => {
-  const url = "/blog?title=" + blog.title;
+  const [url, setURL] = useState();
+
+  useEffect(() => {
+    setURL("/blog-detail/" + encodeURIComponent(blog.title));
+  }, []);
+
   return (
     <>
       <div className="col max-mb-30" data-aos="fade-up">

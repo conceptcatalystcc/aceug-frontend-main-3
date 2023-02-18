@@ -1,199 +1,307 @@
 import React, { useEffect, useState } from "react";
-import { TESTIMONIALS } from "../shared/data";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../shared/baseUrl";
-import { SignatureCourse } from "./SignatureCourse";
 import { firebase, auth } from "../firebase";
+import { A11y, Navigation, Scrollbar, Pagination } from "swiper";
+import { useCart } from "react-use-cart";
+import { Navbar } from "reactstrap";
 
 const Landing = () => {
   const [courses, setCourses] = useState([]);
   const [user, setUser] = useState([]);
+  const [series, setSeries] = useState([]);
+  const navigate = useNavigate();
+  const { addItem, items } = useCart();
+  const [blogs, setBlogs] = useState();
+
   useEffect(() => {
     axios
-      .get(baseURL + "courses/signature/course")
+      .get(baseURL + "testSeries/0")
       .then((data) => data.data)
-      .then((courses) => {
-        setCourses(courses);
+      .then((testSeries) => {
+        setSeries(testSeries.slice(0, 4));
+        console.log(testSeries);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(baseURL + "blogs/0")
+      .then((data) => data.data)
+      .then((blog) => {
+        if (blog === null) {
+          setBlogs([]);
+        } else {
+          setBlogs(blog);
+          console.log(blog);
+        }
       })
       .catch((err) => console.log(err));
   }, []);
 
   return (
     <>
-      <div id="page" className="section">
+      <Navbar></Navbar>
+      <div id="page">
         <div
-          className="intro1-section section section-fluid "
-          style={{
-            backgroundImage: `url("https://img.freepik.com/premium-photo/day-high-school-schoolgirl-with-notebook-backpack-back-school-teen-girl-ready-study-banner-school-girl-student-schoolgirl-pupil-portrait-with-copy-space_545934-17265.jpg")`,
-          }}
-          data-bg-image="%PUBLIC_URL%/assets/images/intro/intro1/bg-1.jpg"
+          className="intro9-section section"
+          style={{ backgroundColor: "#eff2f6" }}
         >
-          <div className="container">
-            <div className="row row-cols-md-2 row-cols-1 max-mb-n30">
-              <div
-                className="col align-self-center max-mb-30"
-                data-aos="fade-up"
-              >
-                <div className="intro1-content text-center text-md-start">
+          <div className="container-fluid">
+            <div className="row align-items-center">
+              <div className="col-lg-6 col-md-6" data-aos="fade-up">
+                <div className="intro9-content text-md-left">
                   <span className="sub-title">
-                    Get Admission into BEST <br /> Universities of India
+                    Your Journey to College Admission Begins Here
                   </span>
                   <h2 className="title">
-                    Your Journey <br /> to College Admission Begins Here
+                    School ke Sath Bhi, School ke Baad Bhi
                   </h2>
                   <div className="desc">
-                    <p>
-                      We have created Learning Journeys which uses AI to help
-                      every student in strengthening their weaker sections
-                    </p>
+                    <p>GET ADMISSION INTO TOP CENTRAL UNIVERSITIES OF INDIA</p>
                   </div>
-                  <Link
-                    to="/courses"
+                  <a
+                    href="JavaScript:Void(0);"
                     className="btn btn-primary btn-hover-secondary"
                   >
-                    Explore Course Journeys
-                  </Link>
+                    {" "}
+                    Get Free Counselling
+                  </a>
                 </div>
               </div>
 
-              <div className="col max-mb-30" data-aos="fade-up">
-                <div className="intro1-course">
-                  <img
-                    className="popular-course-icon"
-                    src="assets/images/intro/intro1/intro-popular-course.png"
-                    alt=""
-                  />
-
-                  <div className="course-2">
-                    <div className="thumbnail">
-                      <a href="/course" className="image">
-                        <img
-                          src="assets/images/courses/370/1_U7CYUus6wy2i8V_HgzBFjw.png"
-                          alt="Course Image"
-                        />
-                      </a>
-                    </div>
-                    <div className="info">
-                      <span className="price">Free</span>
-                      <span className="date">Oct 23, 2022</span>
-                      <h3 className="title">
-                        <a href="course-details-standard-sidebar.html">
-                          How to be consistent for preparation?
-                        </a>
-                      </h3>
-                      <div className="desc">
-                        <p>
-                          Now more than ever, corporations are investing heavily
-                          in IT. The quality of these investments affects the
-                          daily …
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="intro1-scene scene">
-                    <span data-depth="4">
+              <div className="col-lg-6 col-md-6" data-aos="fade-up">
+                <div className="intro9-image-wrap">
+                  <div className="intro9-image">
+                    <div className="inner-img-one">
                       <img
-                        src="assets/images/shape-animation/shape-1.png"
+                        className="worldRotate"
+                        src="assets/images/intro/intro9/home-business-hero-global-image.png"
                         alt=""
                       />
-                    </span>
+                    </div>
+                    <div className="inner-img-two">
+                      <img
+                        src="/assets/ace-images/anupamsir.png"
+                        width={"70%"}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="section-bottom-shape">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              height="100"
-            >
-              <path d="M 0 0 L100 0 Q 50 200 0 0"></path>
-            </svg>
           </div>
         </div>
 
-        <div className="section">
+        <div className="course-section section section-fluid section-padding">
           <div className="container">
-            <div className="section-title text-center" data-aos="fade-up">
-              <span className="sub-title">Education for everyone</span>
-              <h2 className="title">
-                Online <span>Coaching Lessons</span> For Remote Learning.
+            <div className="section-title-two text-center" data-aos="fade-up">
+              <span className="sub-title">
+                92% Students Don't Get Admission Into Top Colleges <br />
+                Because They Did Not Practice Right
+              </span>
+              <h2 className="title fz-48">
+                Practice With Us and Join 8% League
               </h2>
             </div>
 
-            <div className="row row-cols-xl-4 row-cols-sm-2 row-cols-1 g-0">
-              <div className="col" data-aos="fade-up">
-                <Link
-                  to="/courses"
-                  className="icon-box text-center"
-                  style={{ height: "100%" }}
-                  data-vivus-hover
-                >
+            <div className="row row-cols-xl-4 row-cols-lg-2 row-cols-md-2 row-cols-1 max-mb-n30">
+              {series.map((serie) => {
+                return (
+                  <div className="col max-mb-30">
+                    <div className="course-6">
+                      <div className="thumbnail">
+                        <a
+                          className="image"
+                          href={"/test-series-detail/" + serie._id}
+                        >
+                          <img
+                            src={serie.thumbnail}
+                            alt=""
+                            style={{ minHeight: "380px" }}
+                          />
+                          <div className="course-overlay-bg"></div>
+                        </a>
+                      </div>
+                      <div className="info">
+                        <div className="course-caption-main">
+                          {serie.price === 0 ? (
+                            <span className="price">FREE</span>
+                          ) : (
+                            <span className="price">₹ {serie.price}</span>
+                          )}
+
+                          <h3 className="title">
+                            <a href={"/test-series-detail/" + serie._id}>
+                              {serie.name}
+                            </a>
+                          </h3>
+                        </div>
+                        <div className="course-caption-collapse">
+                          <ul className="meta">
+                            <li>
+                              <i className="far fa-file-alt"></i>
+                              {serie.tests.length} Tests
+                            </li>
+                            <li>
+                              <i className="far fa-user-alt"></i>2,834 Students
+                            </li>
+                          </ul>
+                          <div className="desc">
+                            <button
+                              className="btn btn-primary btn-hover-secondary btn-width-100"
+                              onClick={() => {
+                                items.pop();
+                                addItem({
+                                  id: serie._id,
+                                  price: serie.price,
+                                  name: serie.name,
+                                  quantity: 1,
+                                  type: "Test Series",
+                                  subject: serie.subject,
+                                });
+                                navigate("/checkout");
+                              }}
+                            >
+                              Enroll
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="row max-mt-70">
+              <div className="text-center col-xl-4 col-lg-7  mx-auto">
+                <a className="link link-lg" href="/test-series">
+                  Didn't find the desired Mock Series? Explore and Enroll in the
+                  Best Curated Mock Test Series by Experienced Educators <br />
+                  <mark style={{ fontSize: "26px" }}>
+                    View all Mock Tests{" "}
+                    <i className="far fa-long-arrow-right"></i>
+                  </mark>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="section section-padding"
+          style={{ backgroundColor: "#f8f8f8" }}
+        >
+          <div className="container">
+            <div className="section-title-two text-center" data-aos="fade-up">
+              <span className="sub-title">
+                {" "}
+                Out of 480 Students who Joined Us, 462 Students Got 99
+                Percentile{" "}
+              </span>
+              <h2 className="title">
+                We are pioneers of education with a decade of experience, using
+                leading-edge technology to simplify learning
+              </h2>
+            </div>
+
+            <div className="row row-cols-xl-3 row-cols-md-2 row-cols-1 max-mb-n60">
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
                   <div className="icon">
                     <img
                       className="svgInject"
-                      src="assets/images/svg/linea/linea-basic-flag2.svg"
+                      src="assets/images/svg/linea/linea-basic-lightbulb.svg"
                       alt=""
                     />
                   </div>
                   <div className="content">
-                    <h3 className="title">Segmented Notes </h3>
+                    <h3 className="title">One to One</h3>
                     <div className="desc">
                       <p>
-                        Best study material : Developed with lots of Research &
-                        Efforts
+                        Experience personalized attention with our one-to-one
+                        sessions and ace your exams.
                       </p>
                     </div>
-                    <span className="link">
-                      Start here <i className="far fa-long-arrow-right"></i>
-                    </span>
                   </div>
-                </Link>
+                </div>
               </div>
 
-              <div className="col" data-aos="fade-up">
-                <Link
-                  to="/courses"
-                  style={{ height: "100%" }}
-                  className="icon-box text-center"
-                  data-vivus-hover
-                >
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
                   <div className="icon">
                     <img
                       className="svgInject"
-                      src="assets/images/svg/linea/linea-basic-gear.svg"
+                      src="assets/images/svg/linea/linea-basic-map.svg"
                       alt=""
                     />
                   </div>
                   <div className="content">
-                    <h3 className="title">Experienced Faculity </h3>
+                    <h3 className="title">Anywhere</h3>
                     <div className="desc">
                       <p>
-                        Experienced, Knowledgeable & Energetic Faculty : Best in
-                        Class
+                        Study from anywhere, at any time with our online courses
+                        accessible on multiple devices.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
+                  <div className="icon">
+                    <img
+                      className="svgInject"
+                      src="assets/images/svg/linea/linea-basic-clockwise.svg"
+                      alt=""
+                    />
+                  </div>
+                  <div className="content">
+                    <h3 className="title">Flexible Scheduling</h3>
+                    <div className="desc">
+                      <p>
+                        Study at your own pace and on your own schedule with
+                        AceUG.in's flexible online courses.
                       </p>
                     </div>
                     <span className="link">
-                      Discover now <i className="far fa-long-arrow-right"></i>
+                      Get Free Quote <i className="far fa-long-arrow-right"></i>
                     </span>
                   </div>
-                </Link>
+                </div>
               </div>
 
-              <div className="col" data-aos="fade-up">
-                <Link
-                  to="/courses"
-                  style={{ height: "100%" }}
-                  className="icon-box text-center"
-                  data-vivus-hover
-                >
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
+                  <div className="icon">
+                    <img
+                      className="svgInject"
+                      src="assets/images/svg/linea/linea-basic-laptop.svg"
+                      alt=""
+                    />
+                  </div>
+                  <div className="content">
+                    <h3 className="title">Online Coures</h3>
+                    <div className="desc">
+                      <p>
+                        Transform your studies with our flexible and convenient
+                        online courses.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
                   <div className="icon">
                     <img
                       className="svgInject"
@@ -202,541 +310,327 @@ const Landing = () => {
                     />
                   </div>
                   <div className="content">
-                    <h3 className="title">Exam Oriented Mock Test</h3>
+                    <h3 className="title">Consulting</h3>
                     <div className="desc">
                       <p>
-                        Proven Results in various entrance test examinations
+                        Get personalized guidance from experts to help you
+                        achieve your academic goals with our online consulting
+                        services.
                       </p>
                     </div>
-                    <span className="link">
-                      Get Free Quote <i className="far fa-long-arrow-right"></i>
-                    </span>
                   </div>
-                </Link>
+                </div>
               </div>
 
-              <div className="col" data-aos="fade-up">
-                <Link
-                  to="/courses"
-                  style={{ height: "100%" }}
-                  className="icon-box text-center"
-                  data-vivus-hover
-                >
+              <div className="col max-mb-60" data-aos="fade-up">
+                <div className="icon-box-list" data-vivus-hover>
                   <div className="icon">
                     <img
                       className="svgInject"
-                      src="assets/images/svg/linea/linea-basic-display.svg"
+                      src="assets/images/svg/linea/linea-basic-gear.svg"
                       alt=""
                     />
                   </div>
                   <div className="content">
-                    <h3 className="title">Timely completion of Syllabus</h3>
+                    <h3 className="title">Self Development</h3>
                     <div className="desc">
-                      <p>Small batch size for Personalized Attention</p>
+                      <p>
+                        Unlock your full potential and achieve success with
+                        personalized self-development resources at aceug.in
+                      </p>
                     </div>
-                    <span className="link">
-                      Start now <i className="far fa-long-arrow-right"></i>
-                    </span>
                   </div>
-                </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="row max-mt-50">
+              <div className="col text-center">
+                <a
+                  href="/about-us"
+                  className="btn btn-outline-primary learn-more-btn btn-hover-secondary margin-15"
+                >
+                  Learn more{" "}
+                </a>
+                <a
+                  href="/test-series"
+                  className="btn btn-primary btn-hover-secondary margin-15"
+                >
+                  {" "}
+                  Get started today{" "}
+                </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="section section-padding">
+        <div className="service-section section section-padding">
           <div className="container">
-            <div className="teacher-quote-wrapper" data-aos="fade-up">
-              <div className="teacher-quote">
-                <div className="image">
-                  <img src="assets/images/others/teracher-quote-1.jpg" alt="" />
-                </div>
-                <div className="content">
-                  <div className="section-title">
-                    <h2 className="title">
-                      Ger rid of <span>Old School Assumptions</span>
-                    </h2>
-                  </div>
-                  <div className="row">
-                    <div className="quote">
-                      <p>
-                        We assist learners in finding new effective belief and
-                        get rid of the outdated, discouraged and irrelevant life
-                        attitudes. You're upgrading to be a better you.
-                      </p>
-                    </div>
-                    <div className="experience">
-                      <span className="amount">
-                        19<span>years</span>
-                      </span>
-                      <h6 className="title">Work Experience</h6>
-                      <a href="courses-grid-1.html" className="link">
-                        Get Free Guide{" "}
-                        <i className="far fa-long-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="section-title-two text-center" data-aos="fade-up">
+              <span className="sub-title">
+                2 Lakh+ Students were not able to appear in CUET in 2022 Because
+                They Didn't know How to Fill the Form
+              </span>
+              <h2 className="title fz-48">
+                Get Latest Information About All Undergraduate Exams
+              </h2>
             </div>
+
+            <Swiper
+              modules={[Pagination, Scrollbar, A11y]}
+              spaceBetween={50}
+              pagination={{ clickable: true }}
+              scrollbar={{ draggable: true }}
+              onSwiper={(swiper) => console.log(swiper)}
+              onSlideChange={() => console.log("slide change")}
+              breakpoints={{
+                // when window width is >= 640px
+                640: {
+                  width: 640,
+                  slidesPerView: 1,
+                },
+                // when window width is >= 768px
+                768: {
+                  width: 768,
+                  slidesPerView: 2,
+                },
+              }}
+            >
+              {blogs &&
+                blogs.slice(0, 5).map((blog) => {
+                  return (
+                    <SwiperSlide>
+                      {" "}
+                      <a
+                        href={"/blog-detail/" + encodeURIComponent(blog.title)}
+                        className="service"
+                      >
+                        <div className="image">
+                          <img src={blog.thumbnail} alt="" />
+                        </div>
+                        <div className="content">
+                          <h3 className="title">{blog.title} </h3>
+                          <p
+                            class="ellipsis"
+                            style={{
+                              "text-overflow": "ellipsis",
+                              "white-space": "nowrap",
+                              display: "block",
+                              overflow: "hidden",
+                              width: "20em",
+                            }}
+                          >
+                            {blog.meta_desc}
+                          </p>
+
+                          <div className="button-wrap">
+                            <span className="link">
+                              Read Now{" "}
+                              <i className="far fa-long-arrow-right"></i>
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                    </SwiperSlide>
+                  );
+                })}
+            </Swiper>
           </div>
         </div>
 
         <div
-          className="section section-padding bg-pattern fix landing-page-section"
-          data-bg-image="assets/images/bg/background-pattern-grid-line.png"
-          data-bg-color="#f5f1ed"
+          className="testimonial-section section section-padding"
+          style={{ backgroundColor: "#f8f8f8" }}
         >
-          <div className="container">
-            <div className="section-title text-center" data-aos="fade-up">
+          <div className="container-fluid pl-80 pl-lg-15 pl-md-15 pl-sm-15 pl-xs-15 pr-80 pr-lg-15 pr-md-15 pr-sm-15 pr-xs-15">
+            <div className="section-title-two text-center" data-aos="fade-up">
               <span className="sub-title">
-                MAXIMIZE YOUR POTENTIALS and possibilities
+                Just Some Students out of those 462 Students
               </span>
-              <h2 className="title">
-                Learn the secrets to <span>Life Success</span>, <br />
-                these people have got the key.​
-              </h2>
+              <h2 className="title fz-48">What makes them love us?</h2>
             </div>
-
-            <div className="row max-mb-70">
-              <div className="col-lg-9 mx-auto">
-                <div className="row row-cols-md-3 row-cols-1 max-mb-n30">
-                  <div className="col max-mb-30" data-aos="fade-up">
-                    <div className="funfact">
-                      <div className="number">
-                        <span className="counter">3.092</span>+
-                      </div>
-                      <h6 className="text">Registered Enrolls</h6>
-                    </div>
-                  </div>
-
-                  <div className="col max-mb-30" data-aos="fade-up">
-                    <div className="funfact">
-                      <div className="number">
-                        <span className="counter">1.926</span>
-                      </div>
-                      <h6 className="text">Finished sessions</h6>
-                    </div>
-                  </div>
-
-                  <div className="col max-mb-30" data-aos="fade-up">
-                    <div className="funfact">
-                      <div className="number">
-                        <span className="counter">100</span>%
-                      </div>
-                      <h6 className="text">Satisfaction rate</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-slider row" data-aos="fade-up">
+            <div class="card-group">
               <Swiper
-                spaceBetween={30}
-                slidesPerView={2}
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                spaceBetween={50}
                 breakpoints={{
-                  0: {
+                  // when window width is >= 640px
+                  640: {
+                    width: 640,
                     slidesPerView: 1,
                   },
-                  320: {
-                    slidesPerView: 1,
-                  },
-                  990: {
+                  // when window width is >= 768px
+                  768: {
+                    width: 768,
                     slidesPerView: 2,
                   },
                 }}
-                loop
+                navigation
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: true }}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log("slide change")}
               >
-                {TESTIMONIALS.map((TESTIMONIAL, i) => {
-                  return (
-                    <SwiperSlide key={i}>
-                      <div className="testimonial col-12">
-                        <div className="image">
-                          <img src={TESTIMONIAL.imgUrl} alt="" />
-                        </div>
-                        <div className="content">
-                          <p>{TESTIMONIAL.comment}</p>
-                          <h6 className="name">{TESTIMONIAL.name}</h6>
-                          <span className="position">
-                            {TESTIMONIAL.occupation}
-                          </span>
-                        </div>
+                <SwiperSlide>
+                  {" "}
+                  <div className="testimonial-two testimonial-three">
+                    <div className="content">
+                      <p>
+                        Thankyou ever teacher for helping in my cucet exam for
+                        helping in my preparation. With your help I cracked my
+                        cucet exam with a very good score and specially akilesh
+                        sir for converting my weakness into my strength in
+                        quantitative aptitude.
+                      </p>
+                    </div>
+                    <div className="author-info">
+                      <div className="image">
+                        <img
+                          src="https://media.licdn.com/dms/image/C4E03AQEVEOuE4guuag/profile-displayphoto-shrink_800_800/0/1639151351309?e=2147483647&v=beta&t=2zheKalUE3iyp70nxVHl0Rnyu9iSGaGo5EG8EGVaDNg"
+                          alt=""
+                        />
                       </div>
-                    </SwiperSlide>
-                  );
-                })}
+                      <div className="cite">
+                        <h6 className="name">VIJAY KUMAR JHA</h6>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  {" "}
+                  <div className="testimonial-two testimonial-three">
+                    <div className="content">
+                      <p>
+                        The institute is best for IPMAT and CUET coaching. They
+                        truly care about the students. The environment is very
+                        warm and welcoming. The teachers are experienced,
+                        helpful and amicable. They have both facilitated and
+                        demonstrative type of teaching methodology and they
+                        evaluate your progress at each point.
+                      </p>
+                    </div>
+                    <div className="author-info">
+                      <div className="image">
+                        <img
+                          src="https://media.licdn.com/dms/image/C4E03AQFu1NsRCa2PvQ/profile-displayphoto-shrink_800_800/0/1609343750150?e=2147483647&v=beta&t=TaEhutx9ByhOYQ4mnG9OFq6aAGWZW8bwdoiVUqpxzRQ"
+                          alt=""
+                        />
+                      </div>
+                      <div className="cite">
+                        <h6 className="name">Ishita </h6>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  {" "}
+                  <div className="testimonial-two testimonial-three">
+                    <div className="content">
+                      <p>
+                        Thanks to ACE-ug for my splendid success in CUET 2022. I
+                        scored 100 in Political Science and English in
+                        percentile . All credit goes to Team ACE-ug for my CUET
+                        success. I studied in Shiv Vani School Palam.
+                      </p>
+                    </div>
+                    <div className="author-info">
+                      <div className="image">
+                        <img
+                          src="https://media.licdn.com/dms/image/D5603AQFE-ke3YUkBzg/profile-displayphoto-shrink_800_800/0/1669782922409?e=2147483647&v=beta&t=Cj-URuwvcvr64_CIrlt8laN8vq5ewo0zJdrphsHVIDA"
+                          alt=""
+                        />
+                      </div>
+                      <div className="cite">
+                        <h6 className="name">Simarjeet Singh </h6>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  {" "}
+                  <div className="testimonial-two testimonial-three">
+                    <div className="content">
+                      <p>
+                        I really like the way of teaching and amicable atittude
+                        of teachers. In case of any query,the approach towards
+                        teacher concerned is not a difficult task. ACE-ug is
+                        stepping stone towards success and joining this coaching
+                        was one of my best decision.
+                      </p>
+                    </div>
+                    <div className="author-info">
+                      <div className="image">
+                        <img
+                          src="https://media.licdn.com/dms/image/C5603AQEiWu4MH0JyfQ/profile-displayphoto-shrink_200_200/0/1643184532804?e=1681344000&v=beta&t=VvqCu2IwV3vmRpaJGPfH9saXtKVXTQivWeHuZxHEqrc"
+                          alt=""
+                        />
+                      </div>
+                      <div className="cite">
+                        <h6 className="name">himanshi chaudhary</h6>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
               </Swiper>
             </div>
           </div>
         </div>
 
-        <div
-          id="video-section-1"
-          className="section bg-pattern position-relative landing-page-section"
-          data-bg-image="assets/images/bg/background-pattern-grid-line.png"
-          data-bg-color="#f5f1ed"
-        >
-          <div className="container">
-            <div className="section-title text-center" data-aos="fade-up">
-              <span className="sub-title">
-                The combination of all senses into learning
-              </span>
-              <h2 className="title">
-                Learn with all your <span>SENSES​</span>
-              </h2>
-            </div>
-
-            <div className="about-me-video-wrapper">
-              <a
-                href="https://www.youtube.com/watch?v=Dx9bRbhT3SE"
-                className="about-me-video video-popup"
-                data-aos="fade-up"
-                target="_blank"
-              >
-                <img
-                  className="image"
-                  src="assets/images/about/about-me/about-me-popup-video-poster.jpg"
-                  alt=""
-                />
-                <img
-                  className="icon"
-                  src="assets/images/icons/icon-youtube-play.png"
-                  alt=""
-                />
-              </a>
-
-              <div className="shape shape-1 scene">
-                <span data-depth="3">
-                  <img
-                    src="assets/images/shape-animation/shape-2.svg"
-                    alt=""
-                    className="svgInject"
-                  />
-                </span>
-              </div>
-              <div className="shape shape-2 scene">
-                <span data-depth="-3">
-                  <img src="assets/images/shape-animation/shape-3.png" alt="" />
-                </span>
-              </div>
-              <div className="shape shape-3 scene">
-                <span data-depth="4">shape 3</span>
-              </div>
-              <div className="shape shape-4 scene">
-                <span data-depth="4">
-                  <img src="assets/images/shape-animation/shape-1.png" alt="" />
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="section-bottom-shape">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              height="100"
-            >
-              <path
-                className="elementor-shape-fill"
-                d="M 0 0 L0 100 L100 100 L100 0 Q 50 200 0 0"
-              ></path>
-            </svg>
-          </div>
-        </div>
-
-        <div className="section section-padding">
-          <div className="container">
-            <div className="section-title text-center" data-aos="fade-up">
-              <span className="sub-title">Learn at your Pace</span>
-              <h2 className="title">Current Signature Courses</h2>
-            </div>
-
-            <div className="row row-cols-lg-3 row-cols-md-2 row-cols-1 max-mb-n30">
-              {courses.map((course, i) => {
-                return <SignatureCourse key={i} course={course} />;
-              })}
-            </div>
-
-            <div className="row max-mt-70">
-              <div className="text-center col-lg-7 mx-auto">
-                <a className="link link-lg" href="courses-grid-1.html">
-                  Get the most dedicated consultation for your life-changing
-                  course. Earn a certification for your effort and passion
-                  <mark>
-                    Get Free Guide <i className="far fa-long-arrow-right"></i>
-                  </mark>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="blog-section section section-padding bg-pattern-one landing-page-blog"
-          data-bg-image="assets/images/bg/maxcoach-shape-03.png"
-        >
-          <div className="container blog-shape-animation">
-            <div className="section-title text-center" data-aos="fade-up">
-              <span className="sub-title">study with your favorite tutors</span>
-              <h2 className="title">Secrets of learning revealed in blogs</h2>
-            </div>
-
-            <div className="row isotope-grid">
-              {/* <div className="grid-sizer col-1"></div> */}
-
-              <div
-                className="col-xl-3 col-lg-6 col-md-6 grid-item"
-                data-aos="fade-up"
-              >
-                <div className="blog-2 mt-150 mt-md-0 mt-sm-0 mt-xs-0 mb-30 blog-2-1">
-                  <div className="thumbnail">
-                    <a href="blog-details.html" className="image">
-                      <img
-                        src="assets/images/blog/270/blog-01.jpg"
-                        alt="Blog Image"
-                      />
-                    </a>
-                  </div>
-                  <div className="info">
-                    <a href="blog-details.html" className="category">
-                      Online Education
-                    </a>
-                    <h3 className="title">
-                      <a href="blog-details.html">
-                        Become a Better Blogger: Content Planning
-                      </a>
-                    </h3>
-                    <ul className="meta">
-                      <li>
-                        <i className="far fa-calendar"></i>Dec 11, 2019
-                      </li>
-                      <li>
-                        <i className="far fa-eye"></i>47 views
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="col-xl-6 col-lg-6 col-md-6 plr-40 grid-item"
-                data-aos="fade-up"
-              >
-                <div className="blog-2 mb-30 blog-2-1">
-                  <div className="thumbnail overlay-thumb">
-                    <a href="blog-details.html" className="image">
-                      <img
-                        src="assets/images/blog/500/blog-03.jpg"
-                        alt="Blog Image"
-                      />
-                    </a>
-                  </div>
-                  <div className="info content-absolute">
-                    <a href="blog-details.html" className="category">
-                      Learning Strategies
-                    </a>
-                    <h3 className="title">
-                      <a href="blog-details.html">
-                        Five Essential Online Learning Strategies
-                      </a>
-                    </h3>
-                    <ul className="meta">
-                      <li>
-                        <i className="far fa-calendar"></i>Dec 11, 2019
-                      </li>
-                      <li>
-                        <i className="far fa-eye"></i>32 views
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="col-xl-3 col-lg-6 col-md-6 grid-item"
-                data-aos="fade-up"
-              >
-                <div className="blog-2 mt-50 mt-sm-0 mt-xs-0 mb-30 blog-2-1">
-                  <div className="thumbnail">
-                    <a href="blog-details.html" className="image">
-                      <img
-                        src="assets/images/blog/270/blog-02.jpg"
-                        alt="Blog Image"
-                      />
-                    </a>
-                  </div>
-                  <div className="info">
-                    <a href="blog-details.html" className="category">
-                      Learning Strategies
-                    </a>
-                    <h3 className="title">
-                      <a href="blog-details.html">
-                        Five Essential Online Learning Strategies
-                      </a>
-                    </h3>
-                    <ul className="meta">
-                      <li>
-                        <i className="far fa-calendar"></i>Dec 11, 2019
-                      </li>
-                      <li>
-                        <i className="far fa-eye"></i>32 views
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="row max-mt-70">
-              <div className="text-center col-lg-7 mx-auto">
-                <a className="link link-lg" href="blog-grid.html">
-                  Get into details now?​
-                  <mark>
-                    View all posts <i className="far fa-long-arrow-right"></i>
-                  </mark>
-                </a>
-              </div>
-            </div>
-
-            <div className="shape shape-1 scene">
-              <span data-depth="4">shape 3</span>
-            </div>
-            <div className="shape shape-2 scene">
-              <span data-depth="-3">
-                <img src="assets/images/shape-animation/shape-3.png" alt="" />
-              </span>
-            </div>
-            <div className="shape shape-3 scene">
-              <span data-depth="3">
-                <img
-                  src="assets/images/shape-animation/shape-2.svg"
-                  alt=""
-                  className="svgInject"
-                />
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="brand-section section section-padding">
+        <div className="newsletter-section-two section fix section-padding position-relative">
           <div className="container">
             <div className="row">
-              <div className="col-lg-12">
-                <div className="brand-wrapper">
-                  <div className="brand-list">
-                    <div className="brand-carousel" data-aos="fade-up">
-                      <Swiper
-                        slidesPerView={6}
-                        centeredSlides
-                        centeredSlidesBounds
-                        breakpoints={{
-                          0: {
-                            slidesPerView: 2,
-                          },
-                          590: {
-                            slidesPerView: 4,
-                          },
-                          770: {
-                            slidesPerView: 5,
-                          },
-                          1200: {
-                            slidesPerView: 6,
-                          },
-                        }}
-                        loop
-                      >
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/bal bharti public.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/dav.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/loreto convent school.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/dps.jpeg"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/bal bharti public.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/bal bharti public.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <div className="brand">
-                            <a href="#">
-                              <img
-                                src="assets/images/schools/bal bharti public.png"
-                                alt="logo image"
-                                height="100px"
-                                width="150px"
-                              />
-                            </a>
-                          </div>
-                        </SwiperSlide>
-                      </Swiper>
-                    </div>
+              <div className="col-12">
+                <div className="newsletter-content">
+                  <h2 className="title fz-48">
+                    Get Latest Information{" "}
+                    <span>About All Undergraduate Exams</span>
+                  </h2>
+                  <p>
+                    Enter your email address to register to our FREE Information
+                    Subscription <br className="d-none d-md-block" />
+                    delivered through Whatsapp on a regular basis!{" "}
+                  </p>
+                  <div className="newsletter-form">
+                    <form action="#">
+                      <input type="email" placeholder="Your E-mail" />
+                      <button className="btn btn-primary btn-hover-secondary">
+                        Subscribe
+                      </button>
+                    </form>
+                  </div>
+
+                  <div className="shape shape-1 scene">
+                    <span data-depth="4">shape 3</span>
+                  </div>
+                  <div className="shape shape-2 scene">
+                    <span data-depth="4">
+                      <img
+                        src="assets/images/shape-animation/nwesletter-shape-1.png"
+                        alt=""
+                      />
+                    </span>
+                  </div>
+                  <div className="shape shape-3 scene">
+                    <span data-depth="4">
+                      <img
+                        src="assets/images/shape-animation/nwesletter-shape-2.png"
+                        alt=""
+                      />
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <a href="#" className="scroll-top" id="scroll-top">
+          <i className="arrow-top fal fa-long-arrow-up"></i>
+          <i className="arrow-bottom fal fa-long-arrow-up"></i>
+        </a>
       </div>
     </>
   );

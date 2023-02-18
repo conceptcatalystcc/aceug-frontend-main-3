@@ -1,36 +1,32 @@
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../shared/baseUrl";
-import {BlogTile} from "./BlogTile";
+import { BlogTile } from "./BlogTile";
 
 export const BlogGridPage = () => {
-    const [blog, setBlog] = useState([]);
-    const [page, setPage] = useState(0);
-    useEffect(() => {
-  
-      const data ={
-        page:"0",
-        name: "abc"
-      }
-      axios
-        .get(baseURL + "blogs/"+page)
-        .then((data) => data.data)
-        .then((blog) => {
-          if(blog===null){
-            setBlog([]);
-          }else{
-            setBlog(blog);
-            console.log(blog);
-          }
-          
-        })
-        .catch((err) => console.log(err));
-    }, []);
+  const [blog, setBlog] = useState([]);
+  const [page, setPage] = useState(0);
+  useEffect(() => {
+    const data = {
+      page: "0",
+    };
+    axios
+      .get(baseURL + "blogs/" + page)
+      .then((data) => data.data)
+      .then((blog) => {
+        if (blog === null) {
+          setBlog([]);
+        } else {
+          setBlog(blog);
+          console.log(blog);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
-    <div className="page-title-section section">
+      <div className="page-title-section section">
         <div className="page-title">
           <div className="container">
             <h1 className="title">Blog</h1>
@@ -57,7 +53,9 @@ export const BlogGridPage = () => {
           <div className="row max-mt-50">
             <div className="col text-center">
               <button
-              onClick={()=>{setPage(page+2)}}
+                onClick={() => {
+                  setPage(page + 2);
+                }}
                 className="btn btn-outline-primary load-more-btn"
               >
                 Load More <i className="fal fa-redo ms-3"></i>
@@ -65,7 +63,7 @@ export const BlogGridPage = () => {
             </div>
           </div>
         </div>
-      </div>   
+      </div>
     </>
-  )
-}
+  );
+};

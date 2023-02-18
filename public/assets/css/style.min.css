@@ -27,7 +27,7 @@ html {
   height: 100%;
 }
 body {
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   font-size: 15px;
   font-weight: 400;
   font-style: normal;
@@ -46,7 +46,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   font-weight: 700;
   line-height: 1.3;
   margin-top: 0;
@@ -4294,7 +4294,7 @@ textarea:focus {
   padding: 0;
   font-weight: 600;
   border: 0 none;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   -webkit-appearance: none;
   display: block;
   background: #fff;
@@ -4336,7 +4336,7 @@ textarea:focus {
   letter-spacing: 0;
   line-height: 1.74;
   font-size: 15px;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   border: 0 none;
   -webkit-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
@@ -4395,7 +4395,7 @@ textarea:focus {
   padding: 0;
   font-weight: 600;
   border: 0 none;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   -webkit-appearance: none;
   display: block;
   background: 0 0 !important;
@@ -4437,7 +4437,7 @@ textarea:focus {
   letter-spacing: 0;
   line-height: 1.74;
   font-size: 15px;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   color: #fff;
   border: 0 none;
   -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -4939,7 +4939,7 @@ textarea:focus {
   }
 }
 .newsletter-content-wrap .newsletter-title.text-dark .title {
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   color: #333;
   font-weight: 700;
   text-align: left;
@@ -5024,7 +5024,7 @@ textarea:focus {
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   display: block;
   margin-bottom: 10px;
   color: #3f3a64;
@@ -8688,7 +8688,7 @@ textarea:focus {
   font-weight: 700;
   color: #fff;
   display: block;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   margin-bottom: 10px;
 }
 .intro3-content .title {
@@ -9458,7 +9458,7 @@ textarea:focus {
 }
 .intro9-content .desc p {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.67;
   color: #8c89a2;
 }
@@ -16066,7 +16066,7 @@ ul.section-content
   font-size: 18px;
   line-height: 1;
   font-weight: 500;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   color: #333;
   margin-bottom: 10px;
 }
@@ -17296,7 +17296,7 @@ ul.section-content
   font-size: 15px;
   font-weight: 700;
   line-height: 1.78;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   color: #3f3a64;
   padding-left: 30px;
 }
@@ -17494,7 +17494,7 @@ ul.section-content
   font-size: 15px;
   font-weight: 700;
   line-height: 1.78;
-  font-family: Gilroy;
+  font-family: "Roboto", sans-serif;
   color: #3f3a64;
   padding-left: 30px;
 }

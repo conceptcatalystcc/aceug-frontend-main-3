@@ -25,35 +25,37 @@ const AccordionItem = ({ section, sectionIndex, setCurrentQuestion }) => {
           aria-labelledby={"panelsStayOpen-heading" + section._id}
         >
           <div className="accordion-body">
-            <div className="list-group">
-              {section.questions.map((question, questionIndex) => {
-                return (
-                  <button
-                    type="button"
-                    className="list-group-item list-group-item-action"
-                    aria-current="true"
-                    key={question._id}
-                    onClick={() => {
-                      setCurrentQuestion({
-                        qIndex: questionIndex,
-                        sIndex: sectionIndex,
-                      });
-                    }}
-                  >
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          "<b>Q" +
-                          (questionIndex + 1) +
-                          "</b>" +
-                          "<div style='text-overflow:ellipsis;overflow:hidden; display: -webkit-box !important; -webkit-line-clamp: 4; -webkit-box-orient: vertical; white-space: normal;'>" +
-                          question.statement +
-                          "</div>",
+            <div style={{ height: "100vh", overflow: "auto" }}>
+              <div className="list-group overflow-scroll">
+                {section.questions.map((question, questionIndex) => {
+                  return (
+                    <button
+                      type="button"
+                      className="list-group-item list-group-item-action"
+                      aria-current="true"
+                      key={question._id}
+                      onClick={() => {
+                        setCurrentQuestion({
+                          qIndex: questionIndex,
+                          sIndex: sectionIndex,
+                        });
                       }}
-                    ></div>
-                  </button>
-                );
-              })}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            "<b>Q" +
+                            (questionIndex + 1) +
+                            "</b>" +
+                            "<div style='text-overflow:ellipsis;overflow:hidden; display: -webkit-box !important; -webkit-line-clamp: 4; -webkit-box-orient: vertical; white-space: normal;'>" +
+                            question.statement +
+                            "</div>",
+                        }}
+                      ></div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

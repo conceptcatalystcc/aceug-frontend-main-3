@@ -1,16 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Card, Title, Button, Metric } from "@tremor/react";
-import { CourseProgressTile } from "./CourseProgressTile";
-import { TestProgressTile } from "./TestProgressTile";
+import { TestProgressTile } from "./TestSeriesProgressTile";
 import { useNavigate } from "react-router-dom";
-
+import Card from "react-bootstrap/Card";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { baseURL } from "../../shared/baseUrl";
+import RecentTestTile from "./RecentTestTile";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 export const StudentDashboard = () => {
   const { currentUser } = useAuth();
   const [testSeriesEnrollments, setTestSeriesEnrollments] = useState();
+  const [testProgresses, setTestProgresses] = useState();
+  const [profile, setProfile] = useState();
+  const [show, setShow] = useState(false);
+  const { logout } = useAuth();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    currentUser &&
+      currentUser.getIdToken().then((token) => {
+        const payloadHeader = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        axios
+          .get(baseURL + "student/recent-tests", payloadHeader)
+          .then((response) => response.data)
+          .then((progresses) => {
+            console.log(progresses);
+            setTestProgresses(progresses);
+          })
+          .catch((err) => console.log(err));
+      });
+  }, []);
 
   useEffect(() => {
     currentUser &&
@@ -32,6 +61,26 @@ export const StudentDashboard = () => {
       });
   }, []);
 
+  useEffect(() => {
+    currentUser &&
+      currentUser.getIdToken().then((token) => {
+        const payloadHeader = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+
+        axios
+          .get(baseURL + "student/profile", payloadHeader)
+          .then((response) => response.data)
+          .then((profile) => {
+            console.log(profile);
+            setProfile(profile);
+          })
+          .catch((err) => console.log(err));
+      });
+  }, []);
+
   if (!currentUser) {
     return <h1>Loading</h1>;
   }
@@ -44,60 +93,68 @@ export const StudentDashboard = () => {
       <h1 className="text-center m-3 p-5">Student Dashboard</h1>
 
       <div className="row">
-        <div className="col-3 mt-2">
-          <Card maxWidth="max-w-lg">
-            <Metric>
-              Hi, {currentUser ? currentUser.name : "No currentUser"}
-            </Metric>
+        <div className="col-sm-3 mt-2">
+          <Card>
+            <Card.Body>
+              <Card.Title>Hello, {profile ? profile.name : <></>}</Card.Title>
 
-            <hr />
-            <Title>Welcome Back !!!</Title>
+              <Card.Text>
+                Your Doubt Credits -{" "}
+                <b>{profile ? profile.doubt_points : <></>} </b>
+              </Card.Text>
+
+              <Button variant="danger" onClick={handleShow}>
+                Logout
+              </Button>
+            </Card.Body>
           </Card>
 
-          <div className="text-center center">
-            <Button
-              size="md"
-              marginTop="mt-3"
-              importance="primary"
-              text="LogOut"
-              handleClick={() => localStorage.clear()}
-            />
-          </div>
+          <h4 className="mt-50">Test Series in progress </h4>
+          {testSeriesEnrollments &&
+            testSeriesEnrollments.map((enrollment) => {
+              return <TestProgressTile enrollment={enrollment} />;
+            })}
         </div>
-        <div className="col-9">
+        <div className="col-sm-9">
           <div className="row">
-            {/*   <div className="card p-5 m-2">
-              <h4> Courses in progress </h4>
-              <div className=" row card-body align-left">
-                {currentUser.courses_enrolled.map((course, i) => {
-                  return (
-                    <div className="col-md-6">
-                      <CourseProgressTile key={i} course={course} />
-                    </div>
-                  );
-                })}
-              </div>
-            </div> */}
-
             <div className="card p-5 m-2">
-              <h4>Test Series in progress </h4>
+              <h4>Recently Attempted Tests </h4>
               <div className=" row card-body align-left">
                 <div className="col-md-12">
-                  <div class="row row-cols-1 row-cols-md-3 g-4">
-                    {testSeriesEnrollments &&
-                      testSeriesEnrollments.map((enrollment) => {
-                        console.log(enrollment);
-                        return (
-                          <TestProgressTile
-                            testSeries={enrollment.testseries}
-                          />
-                        );
-                      })}
+                  <div className="row row-cols-1 row-cols-md-3 g-4">
+                    {testProgresses &&
+                      testProgresses
+                        .slice(-3)
+                        .reverse()
+                        .map((progress) => {
+                          return <RecentTestTile progress={progress} />;
+                        })}
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Are you sure you want to Logout?</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  logout();
+                  navigate("/");
+                }}
+              >
+                Logout
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>

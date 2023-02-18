@@ -4,7 +4,7 @@ import CoursePage from "./components/CourseDetailPage/CoursePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import * as React from "react";
 import Login from "./components/Authentication/Login";
-import SingleCourseDash from "./components/CourseProgress/SingleCourseDash";
+
 import { SignUp } from "./components/Authentication/SignUp";
 import AddCoursePage from "./components/AddCourse/AddCoursePage";
 import { Quiz } from "./components/Quiz/Quiz";
@@ -24,6 +24,16 @@ import LogoutPage from "./components/Authentication/LogoutPage";
 import { Profile } from "./components/Authentication/Profile";
 import OTPVerify from "./components/Authentication/OTPVerify";
 import LoginPhone from "./components/Authentication/LoginPhone";
+import PrivacyPolicy from "./PrivacyPolicy";
+import ContactUs from "./ContactUs";
+import AboutUs from "./AboutUs";
+import CourseLP from "./components/LandingPages/CourseLP";
+import CourseLP2 from "./components/LandingPages/CourseLP2";
+import Webinar from "./components/Webinar";
+import Registration from "./components/CUETFORM/Registration";
+import Instructions from "./components/CUETFORM/Instructions";
+
+import Middle from "./components/TestSeriesProgress/TestSeriesProgressPage";
 
 function App() {
   return (
@@ -39,18 +49,34 @@ function App() {
         <Route path="/login" element={<LoginPhone />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/checkout" element={<CheckOutPageNew />} />
-        <Route path="/course" element={<CoursePage />} />
+        <Route path="/course/:courseId" element={<CoursePage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/webinar" element={<Webinar />} />
         <Route path="/test-series" element={<TestSeriesGridPage />} />
+        <Route path="/cuet-form" element={<Registration />} />
+        <Route path="/cuet-instructions" element={<Instructions />} />
         <Route
           path="/test-series-detail/:testSeriesId"
           element={<TestSeriesDetail />}
         />
+
+        <Route path="/blog-detail/:blogTitle" element={<BlogDetail />} />
+
         <Route path="/blogs" element={<BlogGridPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/blog" element={<BlogDetail />} />
         <Route path="/vimeo" element={<Video />} />
+        <Route
+          path="/test-series-progress/:testSeriesId"
+          element={<Middle />}
+        />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/quiz-game" element={<QuizGamePage />} />
+        <Route path="/landing" element={<CourseLP />} />
+        <Route path="/landing2" element={<CourseLP2 />} />
+
         <Route
           path="/test-attempt/:testSeriesId/:testId"
           element={<TestAttemptPage />}
@@ -63,7 +89,6 @@ function App() {
 
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         {/* <Route path="/course/:id" element={<CoursePage />} /> */}
-        <Route exact path="/course-dash" element={<SingleCourseDash />} />
       </Routes>
     </BrowserRouter>
   );

@@ -11,11 +11,10 @@ import ButtonStatusSideBar from "./ButtonStatusSideBar";
 import CurrentQuestion from "./CurrentQuestion";
 
 const TestAttemptLayout = ({ test, testSeriesId }) => {
-  const [score, setScore] = useState(0);
-  const [show, setShow] = useState(false);
   const [askSubmit, setAskSubmit] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+  const [timeLeft, setTimeLeft] = useState(0);
+
   const [currentQuestion, setCurrentQuestion] = useState({
     qIndex: 0,
     sIndex: 0,
@@ -28,65 +27,114 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
+  const [intervalId, setIntervalId] = useState(null);
+
+  useEffect(() => {
+    let t = 0;
+    test.sections.map((section) => {
+      t = t + section.questions.length;
+    });
+
+    setTimeLeft(t * 2 * 60);
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (timeLeft === 1) {
+        submitTest();
+      } else {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }
+    }, 1000);
+    setIntervalId(id);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const askToSubmit = () => {
     setAskSubmit(true);
   };
 
-  const calculateScore = () => {
-    var score = 0;
-    var correct = 0;
-    var wrong = 0;
+  function calculateScore() {
     return new Promise((resolve, reject) => {
-      for (var i = 0; i < answerMap.length; i++) {
-        if (answerMap[i] === -1) {
-          continue;
-        } else if (answerMap[i] === test.questions[i].correct) {
-          score = score + 2;
-          correct += 1;
-        } else {
-          score = score - 0.66;
-          wrong += 1;
-        }
-      }
+      let score = 0;
+      let correct = 0;
+      let wrong = 0;
+      let unanswered = 0;
 
-      if (i === answerMap.length) {
-        resolve([score, wrong, correct]);
-      }
+      test.sections.forEach((section) => {
+        section.questions.forEach((question) => {
+          const selectedOptionId = answerMap.get(question._id);
+          console.log("Selected Option", selectedOptionId);
+          if (selectedOptionId === undefined) {
+            unanswered += 1;
+            return;
+          }
+          const selectedOption = question.options.find(
+            (option) => option._id === selectedOptionId
+          );
+          if (selectedOption && selectedOption.correct) {
+            score += question.pmarks;
+            correct += 1;
+          } else if (selectedOption) {
+            score -= question.nmarks;
+            wrong += 1;
+          }
+        });
+      });
+
+      try {
+        resolve({
+          score: score,
+          correct: correct,
+          wrong: wrong,
+          unanswered: unanswered,
+        });
+      } catch (error) {}
     });
-  };
+  }
 
   const submitTest = () => {
     setIsSubmitting(true);
+    clearInterval(intervalId);
+    calculateScore().then((data) => {
+      if (currentUser) {
+        currentUser.getIdToken().then((token) => {
+          const payloadHeader = {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          };
 
-    if (currentUser) {
-      currentUser.getIdToken().then((token) => {
-        const payloadHeader = {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        };
+          const url =
+            baseURL + "testseries/submit-test/" + testSeriesId + "/" + test._id;
+          let answerArray = Array.from(answerMap, (item) => ({
+            question: [item[0]],
+            selected_option: item[1],
+          }));
 
-        const url =
-          baseURL + "testseries/submit-test/" + testSeriesId + "/" + test._id;
-        let answerArray = Array.from(answerMap, (item) => ({
-          question: [item[0]],
-          selected_option: item[1],
-        }));
-
-        axios
-          .post(
-            url,
-            { answer_map: answerArray, score: 20, time: 353 },
-            payloadHeader
-          )
-          .then((response) => response.data)
-          .then((progress) => {
-            setIsSubmitting(false);
-            console.log(progress._id);
-            navigate("/test-report/" + progress._id);
-          });
-      });
-    }
+          axios
+            .post(
+              url,
+              {
+                answer_map: answerArray,
+                score: data.score,
+                time: 353,
+                correct: data.correct,
+                wrong: data.wrong,
+                unanswered: data.unanswered,
+                time_taken: 100 - timeLeft,
+              },
+              payloadHeader
+            )
+            .then((response) => response.data)
+            .then((progress) => {
+              setIsSubmitting(false);
+              console.log(progress._id);
+              navigate("/test-report/" + progress._id);
+            });
+        });
+      }
+    });
   };
 
   useEffect(() => {
@@ -114,7 +162,7 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
               </div>
             </div>
 
-            <div className="col-sm-6">
+            <div className="col-sm-6 fixed-top">
               <div>
                 <center>
                   {" "}
@@ -193,7 +241,7 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
               </div>
               <br />
 
-              <div>
+              <div style={{ position: "sticky", position: "-webkit-sticky" }}>
                 <CurrentQuestion
                   question={
                     test.sections[currentQuestion.sIndex].questions[
@@ -271,7 +319,14 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
               <div id="status">
                 <center>
                   <div>
-                    <h4>Time Remaining: 20</h4>
+                    <h4>
+                      Time Remaining:{" "}
+                      {(parseInt(timeLeft / 3600) % 60) +
+                        ":" +
+                        (parseInt(timeLeft / 60) % 60) +
+                        ":" +
+                        (timeLeft % 60)}
+                    </h4>
                   </div>
 
                   <button
@@ -341,7 +396,15 @@ const TestAttemptLayout = ({ test, testSeriesId }) => {
                       <tbody>
                         <tr>
                           <td>{answerMap.size}</td>
-                          <td>Otto</td>
+                          <td>
+                            {" "}
+                            {(parseInt(timeLeft / 3600) % 60) +
+                              " Hours, " +
+                              (parseInt(timeLeft / 60) % 60) +
+                              " Minutes, " +
+                              (timeLeft % 60) +
+                              " Seconds Left"}
+                          </td>
                         </tr>
                       </tbody>
                     </table>{" "}

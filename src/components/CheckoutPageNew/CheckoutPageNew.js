@@ -11,221 +11,6 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 
-//Register user
-const Step1 = ({ setStep, setUser }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [aspired_college, setAspiredCollege] = useState("");
-  const [aspired_degree, setAspiredDegree] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOTP] = useState();
-  const [error, setError] = useState();
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-
-  useEffect(() => {
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      "sendotp",
-      {
-        size: "invisible",
-        callback: (response) => {},
-      },
-      auth
-    );
-  }, []);
-
-  const sendOTP = () => {
-    const appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(auth, "+91" + phone, appVerifier)
-      .then((confirmationResult) => {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-
-        window.confirmationResult = confirmationResult;
-        setUser({
-          name: name,
-          phone: phone,
-          email: email,
-          aspired_college: aspired_college,
-          aspired_degree: aspired_degree,
-        });
-        setShow(true);
-        // ...
-      })
-      .catch((error) => {
-        //setError("Invalid OTP Entered");
-      });
-  };
-
-  const verifyOTP = () => {
-    window.confirmationResult
-      .confirm(otp)
-      .then((result) => {
-        // User signed in successfully.
-        const user = result.user;
-        auth.currentUser = user;
-
-        axios
-          .post(baseURL + "student/register", {
-            name: name,
-            email: email,
-            phone: phone,
-            aspired_college: aspired_college,
-            aspired_degree: aspired_degree,
-            uid: user.uid,
-          })
-          .then((response) => response.data)
-          .then((data) => {
-            setUser(user);
-          });
-
-        // ...
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.toString());
-      });
-  };
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    sendOTP();
-  }
-
-  return (
-    <>
-      <div className="row ">
-        <div className="col-lg-1"> </div>
-        <div className="col-lg-10">
-          <form action="" onSubmit={handleFormSubmit} className="checkout-form">
-            <div id="billing-form">
-              <div className="row mt-50">
-                <div className="col-md-6 col-12 ">
-                  <label>Full Name*</label>
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    required
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-md-6 col-12 ">
-                  <label>Email Address*</label>
-                  <input
-                    type="email"
-                    placeholder="Email Address"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="col-md-6 col-12 ">
-                  <label>Phone no*</label>
-                  <input
-                    type="number"
-                    step={1}
-                    placeholder="Phone number"
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="col-md-6 col-12 ">
-                  <label>Aspired Degree*</label>
-                  <select
-                    onChange={(e) => setAspiredDegree(e.target.value)}
-                    required
-                  >
-                    <option>B.A.</option>
-                    <option>B.Com</option>
-                    <option>B.Pharma</option>
-                    <option>B.Tech</option>
-                    <option>Others</option>
-                  </select>
-                </div>
-
-                <div className="col-md-12 col-12 ">
-                  <label>Aspired College*</label>
-                  <select
-                    onChange={(e) => setAspiredCollege(e.target.value)}
-                    required
-                  >
-                    <option>Bangladesh</option>
-                    <option>China</option>
-                    <option>country</option>
-                    <option>India</option>
-                    <option>Japan</option>
-                  </select>
-                </div>
-
-                <div className="col-md-12 col-12 ">
-                  <button
-                    className="btn btn-primary btn-hover-secondary btn-width-100 mt-40"
-                    id="sendotp"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div className="col-lg-1"> </div>
-      </div>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Enter the OTP</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {" "}
-          <div className="row">
-            {/*     <div className="col-md-2 col-2 ">
-              <input type="text" autoFocus={true} />
-            </div>
-            <div className="col-md-2 col-2 ">
-              <input type="text" />
-            </div>
-            <div className="col-md-2 col-2 ">
-              <input type="text" />
-            </div>
-            <div className="col-md-2 col-2 ">
-              <input type="text" />
-            </div>
-            <div className="col-md-2 col-2 ">
-              <input type="text" />
-            </div>
-            <div className="col-md-2 col-2 ">
-              <input type="text" />
-            </div> */}
-
-            <div className="col-md-12 col-12 ">
-              <input type="text" onChange={(e) => setOTP(e.target.value)} />
-            </div>
-
-            <div className="col-md-12 col-12 ">
-              <button
-                onClick={verifyOTP}
-                className="btn btn-primary btn-hover-secondary btn-width-100 mt-40"
-              >
-                Verify and Continue
-              </button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </>
-  );
-};
-
 //Cart Display and Pay now
 const Step3 = () => {
   const { isEmpty, totalUniqueItems, items, cartTotal, emptyCart } = useCart();
@@ -257,21 +42,13 @@ const Step3 = () => {
     );
   }
 
-  const [book, setBook] = useState({
-    name: "The Fault In Our Stars",
-    author: "John Green",
-    img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-    price: 250,
-  });
-
   const initPayment = (data) => {
     const options = {
-      key: "rzp_test_JK8jeq57vv45rz",
+      key: "rzp_live_nmCvUPFvO74K1N",
       amount: "10000",
       currency: "INR",
-      name: book.name,
+      name: "AceUG",
       description: "Test Transaction",
-      image: book.img,
       order_id: data.id,
       handler: async (response) => {
         try {
@@ -288,9 +65,10 @@ const Step3 = () => {
                 .post(verifyUrl, response, payloadHeader)
                 .then((response) => response.data)
                 .then((data) => {
-                  if (data.message === "Payment verified successfully") {
+                  console.log(data);
+                  if (data === "Payment Verified Successfully") {
                     emptyCart();
-                    //navigate("/student-dashboard");
+                    navigate("/student-dashboard");
                   }
                 });
               console.log(data);
@@ -320,13 +98,17 @@ const Step3 = () => {
             },
           };
 
-          const { data } = await axios.post(
-            orderUrl,
-            { items: items },
-            payloadHeader
-          );
-          console.log(data);
-          initPayment(data);
+          await axios
+            .post(orderUrl, { items: items }, payloadHeader)
+            .then((response) => response.data)
+            .then((data) => {
+              console.log(data);
+              initPayment(data);
+            })
+            .catch((err) => {
+              emptyCart();
+              alert("Already Enrolled");
+            });
         });
       }
     } catch (error) {
@@ -421,6 +203,7 @@ const CheckOutPageNew = () => {
   const { currentUser } = useAuth();
   const { isEmpty, totalUniqueItems, items, cartTotal } = useCart();
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
   console.log(currentUser);
 
   if (isEmpty) {
@@ -443,6 +226,10 @@ const CheckOutPageNew = () => {
         </div>
       </div>
     );
+  }
+
+  if (!currentUser) {
+    navigate("/signup");
   }
 
   return (
@@ -477,11 +264,7 @@ const CheckOutPageNew = () => {
                 <div className="col-lg-1"> </div>
               </div>
 
-              {currentUser ? (
-                <Step3 />
-              ) : (
-                <Step1 setStep={setStep} setUser={setUser} />
-              )}
+              <Step3 />
             </div>
           </div>
         </div>

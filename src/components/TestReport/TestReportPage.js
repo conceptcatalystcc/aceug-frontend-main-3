@@ -4,7 +4,21 @@ import { useParams } from "react-router-dom";
 import { baseURL } from "../../shared/baseUrl";
 import Loader from "../Loader";
 import SectionReport from "./SectionReport";
-import { LineChart, Line } from "recharts";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  ListGroup,
+  ListGroupItem,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormText,
+} from "reactstrap";
+import Example from "../StudentDashboard/Example";
 
 const Report = ({ progress }) => {
   const [test, setTest] = useState();
@@ -12,7 +26,37 @@ const Report = ({ progress }) => {
     setTest(progress.test);
   }, []);
 
-  const data = [{ uv: 400 }, { uv: 350 }, { uv: 200 }];
+  const [filter, setFilter] = useState("all");
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const questions = progress.test.sections.reduce((all, section) => {
+    return all.concat(section.questions);
+  }, []);
+
+  const filteredQuestions = questions.filter((question) => {
+    if (filter === "all") {
+      return true;
+    }
+    const answer = progress.answer_map.find(
+      (answer) => answer.question.toString() === question._id.toString()
+    );
+    if (!answer) {
+      return filter === "unanswered";
+    }
+    const correctOption = question.options.find((option) => option.correct);
+    if (!correctOption) {
+      return false;
+    }
+    return (
+      (answer.selected_option.toString() === correctOption._id.toString() &&
+        filter === "correct") ||
+      (answer.selected_option.toString() !== correctOption._id.toString() &&
+        filter === "wrong")
+    );
+  });
 
   return (
     <>
@@ -37,32 +81,164 @@ const Report = ({ progress }) => {
                     <th scope="col">Correct</th>
                     <th scope="col">Wrong</th>
                     <th scope="col">Time Taken</th>
-                    <th scope="col">Avg Time / Question</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>23</td>
-                    <td>45 %</td>
-                    <td>13</td>
-                    <td>8</td>
-                    <td>34</td>
-                    <td>2.8</td>
+                    <td>{progress.score}</td>
+                    <td>
+                      {(progress.correct /
+                        (progress.correct + progress.wrong)) *
+                        100}{" "}
+                      %
+                    </td>
+                    <td>{progress.correct}</td>
+                    <td>{progress.wrong}</td>
+                    <td>{progress.time_taken}</td>
                   </tr>
                 </tbody>
               </table>
               <h3>Your Performance</h3>
-              {test &&
-                test.sections.map((section) => {
-                  return (
-                    <SectionReport
-                      section={section}
-                      answerMap={progress.answer_map}
-                    />
-                  );
-                })}
-            </div>
 
+              <div className="row">
+                <div className="col-sm-12">
+                  <Form>
+                    <FormGroup>
+                      <Label for="filter" className="mr-sm-2">
+                        Filter:
+                      </Label>
+                      <Input
+                        type="select"
+                        name="filter"
+                        id="filter"
+                        value={filter}
+                        onChange={handleFilterChange}
+                      >
+                        <option value="all">All</option>
+                        <option value="correct">Correct</option>
+                        <option value="wrong">Wrong</option>
+                        <option value="unanswered">Unanswered</option>
+                      </Input>
+                    </FormGroup>
+                  </Form>
+                </div>
+              </div>
+
+              {filteredQuestions.map((question) => {
+                const answer = progress.answer_map.find(
+                  (answer) =>
+                    answer.question.toString() === question._id.toString()
+                );
+                let attempted = "Unanswered";
+                let attemptedClass = "bg-secondary";
+                if (answer) {
+                  const correctOption = question.options.find(
+                    (option) => option.correct
+                  );
+                  if (
+                    answer.selected_option.toString() ===
+                    correctOption._id.toString()
+                  ) {
+                    attempted = "Correct";
+                    attemptedClass = "bg-success";
+                  } else {
+                    attempted = "Incorrect";
+                    attemptedClass = "bg-danger";
+                  }
+                }
+                return (
+                  <>
+                    <li className="list-group-item ">
+                      <div
+                        dangerouslySetInnerHTML={{ __html: question.statement }}
+                        className="fw-bold"
+                      />
+                      <span className={"badge " + attemptedClass}>
+                        {attempted}
+                      </span>
+
+                      <ul className="list-group">
+                        {question.options.map((option) => {
+                          let optionClass = "list-group-item";
+                          if (answer) {
+                            if (
+                              option._id.toString() ===
+                              answer.selected_option.toString()
+                            ) {
+                              if (option.correct) {
+                                optionClass =
+                                  "list-group-item list-group-item-success";
+                              } else {
+                                optionClass =
+                                  " list-group-item list-group-item-danger";
+                              }
+                            } else if (option.correct) {
+                              optionClass =
+                                "list-group-item list-group-item-success";
+                            }
+                          } else {
+                            if (option.correct) {
+                              optionClass =
+                                "list-group-item list-group-item-success";
+                            }
+                          }
+
+                          return (
+                            <li className={optionClass}>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: option.value,
+                                }}
+                              />
+                            </li>
+                          );
+                        })}
+                      </ul>
+
+                      <div class="accordion-item mt-50">
+                        <h2
+                          class="accordion-header"
+                          id={"panelsStayOpen-headingOne" + question._id}
+                        >
+                          <button
+                            class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={
+                              "#panelsStayOpen-collapseOne" + question._id
+                            }
+                            aria-expanded="true"
+                            aria-controls={
+                              "panelsStayOpen-collapseOne" + question._id
+                            }
+                          >
+                            <b>See Explanation</b>
+                          </button>
+                        </h2>
+                        <div
+                          id={"panelsStayOpen-collapseOne" + question._id}
+                          class="accordion-collapse collapse show"
+                          aria-labelledby={
+                            "panelsStayOpen-headingOne" + question._id
+                          }
+                        >
+                          <div class="accordion-body">
+                            <b>Explanation</b>
+                            <br />
+                            <br />
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: question.explanation,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </>
+                );
+              })}
+            </div>
             <div className="col-sm-1"></div>
           </div>
         </div>

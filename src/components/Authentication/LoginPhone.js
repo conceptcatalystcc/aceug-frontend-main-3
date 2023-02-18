@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import auth from "../../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import axios from "axios";
+import { baseURL } from "../../shared/baseUrl";
 
 const LoginPhone = () => {
   const [resend, setResend] = useState(false);
@@ -25,6 +27,25 @@ const LoginPhone = () => {
       auth
     );
   }, []);
+
+  useEffect(() => {
+    if (resend) {
+      setError(null);
+    }
+  }, [resend]);
+
+  const checkUserExists = () => {
+    axios
+      .get(baseURL + "student/login-check/" + phone)
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.status === 1) {
+          sendOTP();
+        } else {
+          setError("User Does Not Exist");
+        }
+      });
+  };
 
   const sendOTP = () => {
     const appVerifier = window.recaptchaVerifier;
@@ -60,7 +81,7 @@ const LoginPhone = () => {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/profile");
+      navigate("/student-dashboard");
     }
   }, [currentUser, navigate]);
 
@@ -133,7 +154,7 @@ const LoginPhone = () => {
                         <button
                           className="btn btn-primary btn-hover-secondary btn-width-100"
                           id="sendotp"
-                          onClick={sendOTP}
+                          onClick={checkUserExists}
                         >
                           Send OTP
                         </button>
