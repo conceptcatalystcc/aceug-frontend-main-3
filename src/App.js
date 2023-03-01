@@ -34,6 +34,8 @@ import Registration from "./components/CUETFORM/Registration";
 import Instructions from "./components/CUETFORM/Instructions";
 
 import Middle from "./components/TestSeriesProgress/TestSeriesProgressPage";
+import { BlogDetailDirectus } from "./components/BlogDetailPage/BlogDetailDirectus";
+import { TestSeriesDetailDirectus } from "./components/TestSeriesDetail/TestSeriesDetailDirectus";
 
 function App() {
   return (
@@ -57,10 +59,11 @@ function App() {
         <Route path="/cuet-instructions" element={<Instructions />} />
         <Route
           path="/test-series-detail/:testSeriesId"
-          element={<TestSeriesDetail />}
+          element={<TestSeriesDetailDirectus />}
         />
 
-        <Route path="/blog-detail/:blogTitle" element={<BlogDetail />} />
+        {/* <Route path="/blog-detail/:blogTitle" element={<BlogDetail />} /> */}
+        <Route path="/blog-detail/:id" element={<BlogDetailDirectus />} />
 
         <Route path="/blogs" element={<BlogGridPage />} />
         <Route path="/cart" element={<Cart />} />

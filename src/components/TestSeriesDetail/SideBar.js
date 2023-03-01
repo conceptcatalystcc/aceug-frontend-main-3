@@ -110,7 +110,7 @@ const SideBar = ({ testSeries }) => {
                     onClick={() => {
                       items.pop();
                       addItem({
-                        id: testSeries._id,
+                        id: testSeries.id,
                         price: testSeries.price,
                         name: testSeries.name,
                         quantity: 1,

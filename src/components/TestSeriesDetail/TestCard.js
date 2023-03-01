@@ -61,7 +61,7 @@ const TestCard = ({ test, testSeries }) => {
             <button
               className="btn btn-primary btn-hover-secondary btn-width-100"
               onClick={() => {
-                navigate("/test-attempt/" + testSeries._id + "/" + test._id);
+                navigate("/test-attempt/" + testSeries.id + "/" + test._id);
               }}
             >
               Attempt Now{" "}

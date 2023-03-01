@@ -8,7 +8,6 @@ import { baseURL } from "../shared/baseUrl";
 import { firebase, auth } from "../firebase";
 import { A11y, Navigation, Scrollbar, Pagination } from "swiper";
 import { useCart } from "react-use-cart";
-import { Navbar } from "reactstrap";
 
 const Landing = () => {
   const [courses, setCourses] = useState([]);
@@ -46,7 +45,6 @@ const Landing = () => {
 
   return (
     <>
-      <Navbar></Navbar>
       <div id="page">
         <div
           className="intro9-section section"

@@ -7,7 +7,9 @@ const AboutUs = () => {
         class="page-banner-section section section-padding-200"
         style={{
           backgroundImage:
-            "url(/assets/images/page-banner/about-us-01-hero-bg.jpg)",
+            "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),url(https://s01.sgp1.cdn.digitaloceanspaces.com/article/144220-himianjfvh-1594453986.jpg)",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
         }}
       >
         <div class="container">
@@ -16,10 +18,7 @@ const AboutUs = () => {
               <div class="page-banner-title">
                 <h1 class="title">
                   We just have a single mission <br />
-                  <span style={{ color: "#198754" }}>
-                    {" "}
-                    TO GET OUR STUDENTS ADMITTED INTO BEST COLLEGES
-                  </span>
+                  <span> TO GET OUR STUDENTS ADMITTED INTO BEST COLLEGES</span>
                 </h1>
               </div>
             </div>
@@ -36,13 +35,15 @@ const AboutUs = () => {
                   Get to know about <strong>AceUG</strong>
                 </span>
                 <h2 class="title">
-                  Learn about our <span>Work Culture</span> at AceUG
+                  Empowering Students to Succeed in Undergraduate Examinations
                 </h2>
                 <p>
-                  Spend some time to visit our website or head office and
-                  discover our current courses, enrollment procedure, and
-                  registration deadline. We're opening new classes every
-                  beginning of each month.{" "}
+                  At Aceug.in, we take pride in the expertise and experience of
+                  our team of teachers. Each of our teachers is a subject matter
+                  expert and has a proven track record of helping students
+                  achieve their academic goals. We believe that the quality of
+                  our teaching staff is one of the key factors that sets us
+                  apart from other online course providers.
                 </p>
               </div>
             </div>
@@ -51,14 +52,8 @@ const AboutUs = () => {
               <div class="about-image">
                 <div class="about-image-one">
                   <img
-                    src="/assets/images/about/about01/about1.jpg"
+                    src="https://media.istockphoto.com/id/1345493001/vector/woman-student-like-superhero-flying-in-sky.jpg?s=612x612&w=0&k=20&c=62xoBKGm2_-SIbJ5dIeTMPCZVEiG9hcmeXcdRWhWmJg="
                     alt="about01"
-                  />
-                </div>
-                <div class="about-image-two">
-                  <img
-                    src="/assets/images/about/about01/about2.jpg"
-                    alt="about02"
                   />
                 </div>
 
@@ -98,10 +93,14 @@ const AboutUs = () => {
       <div class="team-section section mb-50">
         <div class="container">
           <div class="section-title text-center" data-aos="fade-up">
-            <span class="sub-title">The guys behind the curtains</span>
+            <span class="sub-title"> Meet Our Experienced Teachers</span>
             <h2 class="title fz-48">
-              Whose <span> Inspirations</span> You Love
+              The <span>Experts</span> Behind Your <span>Success</span>
             </h2>
+            <p>
+              We're confident that you'll find the perfect mentor to help you
+              reach your full potential and achieve your dreams.
+            </p>
           </div>
 
           <div class="row ht-team-member-style-two">

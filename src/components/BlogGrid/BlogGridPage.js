@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { baseURL } from "../../shared/baseUrl";
+import { baseDirectusURL, baseURL } from "../../shared/baseUrl";
 import { BlogTile } from "./BlogTile";
 
 export const BlogGridPage = () => {
@@ -11,13 +11,13 @@ export const BlogGridPage = () => {
       page: "0",
     };
     axios
-      .get(baseURL + "blogs/" + page)
+      .get(baseDirectusURL + "items/blogs")
       .then((data) => data.data)
       .then((blog) => {
         if (blog === null) {
           setBlog([]);
         } else {
-          setBlog(blog);
+          setBlog(blog.data);
           console.log(blog);
         }
       })
