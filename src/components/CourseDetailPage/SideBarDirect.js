@@ -4,7 +4,7 @@ import { useCart } from "react-use-cart";
 
 import Razorpay from "../CheckOut/Razorpay";
 
-const SideBar = ({ course }) => {
+const SideBarDirect = ({ course }) => {
   const navigate = useNavigate();
   const { addItem, items } = useCart();
   const [added, setAdded] = useState(false);
@@ -78,89 +78,26 @@ const SideBar = ({ course }) => {
                   </div>
                 </div>
 
-                {/*      <div className="lp-course-buttons">
-                  <button
-                    className="btn btn-primary btn-hover-secondary btn-width-100"
-                    onClick={() => {
-                      if (!items.find((item) => item.id === course._id))
-                        addItem({
-                          id: course._id,
-                          price: course.price,
-                          name: course.name,
-                          quantity: 1,
-                          type: "Course",
-                          subject: course.subject,
-                        });
-                      setAdded(true);
-                    }}
-                    disabled={added ? true : false}
-                  >
-                    {added ? "Added to cart" : "Add to cart"}
-                  </button>
-                </div> */}
                 <div className="lp-course-buttons">
                   <button
                     className="btn btn-primary btn-hover-secondary btn-width-100"
                     onClick={() => {
-                      if (!items.find((item) => item.id === course._id))
-                        addItem({
-                          id: course._id,
-                          price: course.price,
-                          name: course.name,
-                          quantity: 1,
-                          type: "Course",
-                          subject: course.subject,
-                        });
+                      items.pop();
+                      addItem({
+                        id: course._id,
+                        price: course.price,
+                        name: course.name,
+                        quantity: 1,
+                        type: "Course",
+                        subject: course.subject,
+                      });
+
                       navigate("/checkout");
                     }}
                   >
                     Enroll
                   </button>
                 </div>
-                {/* <div className="entry-course-share">
-                  <div className="share-media">
-                    <div className="share-label">Share this course</div>
-                    <span className="share-icon far fa-share-alt"></span>
-
-                    <div className="share-list">
-                      <a
-                        className="hint--bounce hint--top hint--theme-two"
-                        aria-label="Facebook"
-                        target="_blank"
-                        href=""
-                      >
-                        <i className="fab fa-facebook-f"></i>
-                      </a>
-
-                      <a
-                        className="hint--bounce hint--top hint--theme-two"
-                        aria-label="Twitter"
-                        target="_blank"
-                        href=""
-                      >
-                        <i className="fab fa-twitter"></i>
-                      </a>
-
-                      <a
-                        className="hint--bounce hint--top hint--theme-two"
-                        aria-label="Linkedin"
-                        target="_blank"
-                        href=""
-                      >
-                        <i className="fab fa-linkedin"></i>
-                      </a>
-
-                      <a
-                        className="hint--bounce hint--top hint--theme-two"
-                        aria-label="Tumblr"
-                        target="_blank"
-                        href=""
-                      >
-                        <i className="fab fa-tumblr-square"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -170,4 +107,4 @@ const SideBar = ({ course }) => {
   );
 };
 
-export default SideBar;
+export default SideBarDirect;

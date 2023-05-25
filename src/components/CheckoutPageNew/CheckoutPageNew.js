@@ -66,7 +66,7 @@ const Step3 = () => {
                 .then((response) => response.data)
                 .then((data) => {
                   console.log(data);
-                  if (data === "Payment Verified Successfully") {
+                  if (data.message === "Payment successful.") {
                     emptyCart();
                     navigate("/student-dashboard");
                   }

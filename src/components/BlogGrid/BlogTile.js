@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { baseDirectusURL, baseURL } from "../../shared/baseUrl";
 
 export const BlogTile = ({ blog }) => {
   return (
@@ -9,11 +8,7 @@ export const BlogTile = ({ blog }) => {
         <div className="course-2">
           <div className="thumbnail">
             <Link to={"/blog-detail/" + blog.id} className="image">
-              <img
-                src={baseDirectusURL + "assets/" + blog.poster}
-                alt="Course Image"
-                height={200}
-              />
+              <img src={blog.thumbnail} alt="Course Image" height={200} />
             </Link>
           </div>
           <div className="info">

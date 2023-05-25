@@ -16,7 +16,7 @@ import "@tremor/react/dist/esm/tremor.css";
 import { QuizGamePage } from "./components/QuizGame/QuizGamePage";
 import { Cart } from "./components/Cart/Cart";
 import { TestSeriesDetail } from "./components/TestSeriesDetail/TestSeriesDetail";
-import Video from "./components/CoursePage/Video";
+
 import TestAttemptPage from "./components/TestAttempt/TestAttemptPage";
 import CheckOutPageNew from "./components/CheckoutPageNew/CheckoutPageNew";
 import TestReportPage from "./components/TestReport/TestReportPage";
@@ -30,12 +30,10 @@ import AboutUs from "./AboutUs";
 import CourseLP from "./components/LandingPages/CourseLP";
 import CourseLP2 from "./components/LandingPages/CourseLP2";
 import Webinar from "./components/Webinar";
-import Registration from "./components/CUETFORM/Registration";
-import Instructions from "./components/CUETFORM/Instructions";
 
 import Middle from "./components/TestSeriesProgress/TestSeriesProgressPage";
-import { BlogDetailDirectus } from "./components/BlogDetailPage/BlogDetailDirectus";
-import { TestSeriesDetailDirectus } from "./components/TestSeriesDetail/TestSeriesDetailDirectus";
+
+import CourseAttemptPage from "./components/CourseAttemptPage/CourseAttemptPage";
 
 function App() {
   return (
@@ -55,20 +53,18 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/webinar" element={<Webinar />} />
         <Route path="/test-series" element={<TestSeriesGridPage />} />
-        <Route path="/cuet-form" element={<Registration />} />
-        <Route path="/cuet-instructions" element={<Instructions />} />
+
         <Route
           path="/test-series-detail/:testSeriesId"
-          element={<TestSeriesDetailDirectus />}
+          element={<TestSeriesDetail />}
         />
 
-        {/* <Route path="/blog-detail/:blogTitle" element={<BlogDetail />} /> */}
-        <Route path="/blog-detail/:id" element={<BlogDetailDirectus />} />
+        <Route path="/blog-detail/:blogTitle" element={<BlogDetail />} />
 
         <Route path="/blogs" element={<BlogGridPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/blog" element={<BlogDetail />} />
-        <Route path="/vimeo" element={<Video />} />
+
         <Route
           path="/test-series-progress/:testSeriesId"
           element={<Middle />}
@@ -78,11 +74,16 @@ function App() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/quiz-game" element={<QuizGamePage />} />
         <Route path="/landing" element={<CourseLP />} />
-        <Route path="/landing2" element={<CourseLP2 />} />
+        <Route path="/cuet-english-language" element={<CourseLP2 />} />
 
         <Route
           path="/test-attempt/:testSeriesId/:testId"
           element={<TestAttemptPage />}
+        />
+
+        <Route
+          path="/course-attempt/:courseId"
+          element={<CourseAttemptPage />}
         />
 
         <Route

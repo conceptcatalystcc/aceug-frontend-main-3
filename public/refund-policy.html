@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
   <head>
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -15,7 +15,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>AceUG</title>
-
+    <meta name="robots" content="noindex, follow" />
     <meta name="description" content="" />
     <meta
       name="viewport"
@@ -27,10 +27,6 @@
       type="image/x-icon"
       href="/assets/images/favicon.png"
     />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
 
     <!-- CSS
 	============================================ -->
@@ -79,11 +75,11 @@
 
 <!-- MailerLite Universal -->
 <script>
-  (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-  .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-  n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-  (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-  ml('account', '290466');
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '290466');
 </script>
 <!-- End MailerLite Universal -->
 
@@ -96,111 +92,128 @@
 
   gtag('config', 'G-1E0FBZ2PEF');
 </script>
-
-<!-- Meta Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1894955954195693');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1894955954195693&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
-  <meta name="facebook-domain-verification" content="e0axck7u7m37nwogndk58i8zovo4x3" />
+ 
 </head>
   <body>
   
     <noscript>You need to enable JavaScript to run this app.</noscript>
     
-  <div class="header-section header-shadow sticky-header section">
-    <div class="header-inner">
-        <div class="container position-relative">
-          <div class="row justify-content-between align-items-center">
-            <div class="col-xl-2 col-auto">
-              <div class="header-logo">
-                <a href="/">
-                  <img
-                    class="dark-logo"
-                    src="/assets/images/logo/aceug_logo.jpg"
-                    alt="Learts Logo"
-                    width="100px"
-                    height="100px"
-                  />
-                  <img
-                    class="light-logo"
-                    src="/assets/images/logo/aceug_logo.jpg"
-                    alt="Learts Logo"
-                  />
-                </a>
-              </div>
-            </div>
-
-            <div class="col d-none d-xl-block position-static">
-              <nav class="site-main-menu menu-hover-1">
-                <ul>
-                  <li class="has-children position-static">
-                    <a href="/">Home</a>
-                  </li>
-                  <li class="has-children">
-                    <a href="/courses">Courses</a>
-                  </li> 
-
-
-
-                  <li class="has-children">
-                    <a href="/test-series">Test Series</a>
-                  </li>
-                  <li class="has-children">
-                    <a href="/blogs">Blogs</a>
-                  </li>
-                  <li class="has-children">
-                    <a href="/aboutus.html">About Us</a>
-                  </li>
-
-                  <li class="has-children">
-                    <a href="/contact-us">Contact Us</a>
-                  </li>
-            
-                </ul>
-              </nav>
-            </div>
-
-            <div class="col-xl-2 col-auto">
-              <div class="header-right">
-                <div class="inner">
-                
-
-                  <div class="header-login">
-                    <a href="/login">
-                      <i class="far fa-user-circle"></i>
+    <div class="header-section header-shadow sticky-header section">
+        <div class="header-inner">
+            <div class="container position-relative">
+              <div class="row justify-content-between align-items-center">
+                <div class="col-xl-2 col-auto">
+                  <div class="header-logo">
+                    <a href="/">
+                      <img
+                        class="dark-logo"
+                        src="/assets/images/logo/aceug_logo.jpg"
+                        alt="Learts Logo"
+                        width="100px"
+                        height="100px"
+                      />
+                      <img
+                        class="light-logo"
+                        src="/assets/images/logo/aceug_logo.jpg"
+                        alt="Learts Logo"
+                      />
                     </a>
                   </div>
-
-                  <div class="header-mobile-menu-toggle d-xl-none ml-sm-2">
-                    <button class="toggle">
-                      <i class="icon-top"></i>
-                      <i class="icon-middle"></i>
-                      <i class="icon-bottom"></i>
-                    </button>
+                </div>
+    
+                <div class="col d-none d-xl-block position-static">
+                  <nav class="site-main-menu menu-hover-1">
+                    <ul>
+                      <li class="has-children position-static">
+                        <a href="/">Home</a>
+                      </li>
+                      <li class="has-children">
+                        <a href="/courses">Courses</a>
+                      </li> 
+    
+    
+    
+                      <li class="has-children">
+                        <a href="/test-series">Test Series</a>
+                      </li>
+                      <li class="has-children">
+                        <a href="/blogs">Blogs</a>
+                      </li>
+                      <li class="has-children">
+                        <a href="/aboutus.html">About Us</a>
+                      </li>
+    
+                      <li class="has-children">
+                        <a href="/contact-us">Contact Us</a>
+                      </li>
+                
+                    </ul>
+                  </nav>
+                </div>
+    
+                <div class="col-xl-2 col-auto">
+                  <div class="header-right">
+                    <div class="inner">
+                    
+    
+                      <div class="header-login">
+                        <a href="/login">
+                          <i class="far fa-user-circle"></i>
+                        </a>
+                      </div>
+    
+                      <div class="header-mobile-menu-toggle d-xl-none ml-sm-2">
+                        <button class="toggle">
+                          <i class="icon-top"></i>
+                          <i class="icon-middle"></i>
+                          <i class="icon-bottom"></i>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+      </div>
+
+  <div id="page">
+
+      <div class="contact-information-section section section-padding-bottom">
+        <div class="container">
+          <div class="row margin-bottom-85">
+            <div class="col-12">
+              <div class="contact-title max-width-740">
+                <h2 class="title">
+                      
+  <br />
+  <br />
+                 Refund and Cancellation Policy
+                </h2>
+              </div>
+            </div>
+          </div>
+         
+        <p>
+            At aceug.in, we strive to provide high-quality online courses and test series to our customers. If you are not satisfied with your purchase, we offer a 7-day no-questions-asked refund policy. This means that if you decide to cancel your purchase within the first 7 days after the date of purchase, you can receive a full refund.
+</p><p>
+To request a refund, please send an email to aceug365@gmail.com with your order details and reason for cancellation. Once we receive your request, we will process your refund within 7-10 business days.
+</p><p>
+Please note that after the 7-day period, we do not offer refunds or cancellations on any of our products or services. Additionally, if you have accessed any of our online course materials or completed any of our tests, you are not eligible for a refund.
+</p><p>
+If you have any questions or concerns about our refund and cancellation policy, please contact us at aceug365@gmail.com
+        </p>
+  
         </div>
       </div>
-  </div>
 
-  <div id="root">
-  
+
+
+
+
+      
+
+
   </div>
 
  
@@ -222,7 +235,7 @@
                             <div class="content">
                                 <p>Gate No - 3, 28/5A, First Floor, Double Storey, Ashok Nagar<br/>Near Metro Station, Tilak Nagar, New Delhi, Delhi 110018</p>
 
-                                   <p>Mobile: +91 9873334599 <br/>
+                                   <p>Mobile: +91 9818027701 <br/>
                                     <a href="https://chatwith.io/s/aceug"> WhatsApp: +91 9873334599 </a> <br/>
                                    <a href="mailto:aceug365@gmail.com">Email: aceug365@gmail.com</a>  </p>
                               
@@ -334,71 +347,6 @@
         </div>
     </div>
 </div>
-
-<form name="contact" netlify netlify-honeypot="bot-field" hidden>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Full Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="exampleInputPassword1"
-      placeholder="Full Name"
-      name="fullname"
-    
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input
-      type="email"
-      class="form-control"
-      id="exampleInputEmail1"
-      aria-describedby="emailHelp"
-      placeholder="Enter email"
-      name="email"
-      
-    />
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputEmail1">Phone Number</label>
-    <input
-      type="number"
-      class="form-control"
-      id="exampleInputEmail1"
-      aria-describedby="emailHelp"
-      placeholder="Enter Your Whatsapp Number"
-      name="phone"
-    
-    />
-  </div>
-  <br />
-
- 
-
-</form>
-
-<form
-name="contact" netlify hidden
->
-<input
-type="text"
-placeholder="Your Name *"
-name="name"
-/>
-<input
-type="text"
-placeholder="Subject *"
-name="subject"
-/>
-<input type="email" placeholder="Email *" name="email" />
-<textarea name="message" placeholder="Message"></textarea>
-<button class="btn btn-primary btn-hover-secondary btn-width-180 btn-height-60">
-  Submit
-</button>
- 
-</form>
       <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

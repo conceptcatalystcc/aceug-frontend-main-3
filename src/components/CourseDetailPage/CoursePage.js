@@ -10,6 +10,7 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
+import SideBarDirect from "./SideBarDirect";
 
 const CoursePage = () => {
   const [course, setCourse] = useState([]);
@@ -79,7 +80,7 @@ const CoursePage = () => {
                   </ul>
                 </div>
                 <div className="tab-content mb-5">
-                  <Overview overview={course.overview} />
+                  <Overview course={course} />
 
                   <Curriculum modules={course.modules} />
 
@@ -90,7 +91,7 @@ const CoursePage = () => {
               </div>
             </div>
 
-            <SideBar course={course} />
+            <SideBarDirect course={course} />
           </div>
         </div>
       </div>

@@ -1,28 +1,32 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { baseDirectusURL, baseURL } from "../../shared/baseUrl";
+import { baseURL } from "../../shared/baseUrl";
 import { BlogTile } from "./BlogTile";
 
 export const BlogGridPage = () => {
-  const [blog, setBlog] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [page, setPage] = useState(0);
   useEffect(() => {
-    const data = {
-      page: "0",
-    };
     axios
-      .get(baseDirectusURL + "items/blogs")
-      .then((data) => data.data)
-      .then((blog) => {
-        if (blog === null) {
-          setBlog([]);
-        } else {
-          setBlog(blog.data);
-          console.log(blog);
+      .get(baseURL + "blogs/", { params: { page: page } })
+      .then((response) => response.data)
+      .then((newBlogs) => {
+        if (newBlogs) {
+          setBlogs(newBlogs);
         }
-      })
-      .catch((err) => console.log(err));
+      });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(baseURL + "blogs/", { params: { page: page } })
+      .then((response) => response.data)
+      .then((newBlogs) => {
+        if (newBlogs) {
+          setBlogs(blogs.concat(newBlogs));
+        }
+      });
+  }, [page]);
 
   return (
     <>
@@ -39,14 +43,14 @@ export const BlogGridPage = () => {
           <div className="row justify-content-between align-items-center max-mb-20">
             <div className="col-sm-auto col-12 max-mb-10">
               <p className="result-count">
-                We found <span>{blog.length}</span> blog available for you
+                We found <span>{blogs.length}</span> blog available for you
               </p>
             </div>
           </div>
 
           <div className="row row-cols-lg-3 row-cols-md-2 row-cols-1 max-mb-n30">
-            {blog.map((blog, i) => (
-              <BlogTile key={i} blog={blog} />
+            {blogs.map((blog) => (
+              <BlogTile blog={blog} />
             ))}
           </div>
 
@@ -54,7 +58,7 @@ export const BlogGridPage = () => {
             <div className="col text-center">
               <button
                 onClick={() => {
-                  setPage(page + 2);
+                  setPage(page + 1);
                 }}
                 className="btn btn-outline-primary load-more-btn"
               >

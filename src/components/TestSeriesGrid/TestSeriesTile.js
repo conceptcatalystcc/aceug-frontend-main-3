@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "react-use-cart";
-import { baseDirectusURL } from "../../shared/baseUrl";
 
 export const TestSeriesTile = ({ testSeries }) => {
   const url = "/test-series-detail/" + testSeries.id;
@@ -14,11 +13,7 @@ export const TestSeriesTile = ({ testSeries }) => {
         <div className="course-2">
           <div className="thumbnail">
             <Link to={url} className="image">
-              <img
-                src={baseDirectusURL + "assets/" + testSeries.poster}
-                alt="Course Image"
-                height={200}
-              />
+              <img src={testSeries.poster} alt="Course Image" height={200} />
             </Link>
           </div>
           <div className="info">

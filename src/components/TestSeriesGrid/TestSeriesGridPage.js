@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { baseDirectusURL } from "../../shared/baseUrl";
+import { baseURL } from "../../shared/baseUrl";
 import { TestSeriesTile } from "./TestSeriesTile";
 
 export const TestSeriesGridPage = () => {
@@ -8,7 +8,7 @@ export const TestSeriesGridPage = () => {
   const [page, setPage] = useState(0);
   useEffect(() => {
     axios
-      .get(baseDirectusURL + "items/testSeries/")
+      .get(baseURL + "items/testSeries/")
       .then((data) => data.data)
       .then((testSeries) => {
         console.log("Test Series", testSeries);

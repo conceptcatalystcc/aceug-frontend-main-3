@@ -1,6 +1,60 @@
+import axios from "axios";
 import React from "react";
+import { baseURL } from "../../shared/baseUrl";
 
 const CourseLP2 = () => {
+  const initPayment = (data) => {
+    const options = {
+      key: "rzp_test_2JdNJK8OObQHqG",
+      amount: "10000",
+      currency: "INR",
+      name: "AceUG",
+      description: "Test Transaction",
+      order_id: data.id,
+      handler: async (response) => {
+        console.log("Response", response);
+        try {
+          const verifyUrl = baseURL + "payment/verify";
+          await axios
+            .post(verifyUrl, response)
+            .then((response) => response.data)
+            .then((data) => {
+              console.log(data);
+              if (data === "Payment Verified Successfully") {
+                alert("Payment Verified");
+              }
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayment = async () => {
+    try {
+      const orderUrl = baseURL + "payment/orders";
+
+      await axios
+        .post(orderUrl, { uuid: "abcdefgh" })
+        .then((response) => response.data)
+        .then((data) => {
+          console.log(data);
+          initPayment(data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {" "}
@@ -38,7 +92,7 @@ const CourseLP2 = () => {
               <br />
 
               <a
-                href="https://rzp.io/l/NK1DYRG"
+                onClick={handlePayment}
                 style={{
                   backgroundColor: "#EADB5B",
                   color: "#302B62",
@@ -338,7 +392,7 @@ const CourseLP2 = () => {
               <br />
               <br />
               <a
-                href="https://rzp.io/l/NK1DYRG"
+                onClick={handlePayment}
                 style={{
                   backgroundColor: "#EADB5B",
                   color: "#302B62",
@@ -801,7 +855,7 @@ const CourseLP2 = () => {
           </div>
           <br />
           <a
-            href="https://rzp.io/l/NK1DYRG"
+            onClick={handlePayment}
             style={{
               backgroundColor: "#EADB5B",
               color: "#302B62",
@@ -834,8 +888,11 @@ const CourseLP2 = () => {
                 <p>Meet Your Coach, Guide, and Mentor</p>
                 <h1>Anupam Dubey</h1>
                 <h6>
-                  Hi! I’m Ankur Warikoo. And thanks for taking an interest in
-                  reading about me!
+                  Anupam Sir has 12 Years of Experience. He started his career
+                  as an Assistant SAT teacher. He also contributed to the growth
+                  of class 12 students in his next phase of his career. He has
+                  been a part of Teach India, A CSR initiative of Times Of
+                  India.
                 </h6>
               </center>
               <br />
@@ -845,14 +902,15 @@ const CourseLP2 = () => {
                 </div>
                 <div className="col-sm-8">
                   <p>
-                    I call myself a Productivity Geek because I am obsessed with
-                    systems, planning, and smart work. In my career, I have been
-                    fortunate enough to experience multiple things like starting
-                    up nearbuy.com, making it grow to $100Mn in annual sales,
-                    building a personal brand with 8.3Mn+ followers, investing
-                    in startups, acting as a mentor and advisor to founders,
-                    speaking at leading colleges and organizations, being
-                    featured on the list of ‘Fortune 40 under 40’.
+                    For the past 6 years he is completely into competitive
+                    entrance exams. He has a very strong grip over English
+                    grammar. He has mentored more than 10000 students so far in
+                    online and offline mode. As far as CUET is concerned he has
+                    been a pioneer name in that and has contributed a great
+                    result in all the top colleges of Delhi University or other
+                    Top central universities. If you are learning from Anupam
+                    Sir, one thing will be sure that you will not face any
+                    problem in the English Grammar section.
                   </p>
                 </div>
               </div>
